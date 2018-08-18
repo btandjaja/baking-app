@@ -1,0 +1,13 @@
+<resources>
+    <!-- Network Utils -->
+    <string name="app_name">Baking Recipes</string>
+    <string name="scheme">https</string>
+    <string name="authority">d17h27t6h515a5.cloudfront.net</string>
+    <string name="append_path_1">topher</string>
+    <string name="append_path_2">2017</string>
+    <string name="append_path_3">May</string>
+    <string name="append_path_4">59121517_baking</string>
+    <string name="append_path_5">baking.json</string>
+
+
+</resources>
