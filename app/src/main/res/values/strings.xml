@@ -9,5 +9,9 @@
     <string name="append_path_4">59121517_baking</string>
     <string name="append_path_5">baking.json</string>
 
-
+    <!-- List of Recipes Activity-->
+    <string name="error">Failed to load data!\nPlease check internet
+        \nconnection and try again!</string>
+    <string name="query_loader">1001</string>
+    <string name="query">query</string>
 </resources>
