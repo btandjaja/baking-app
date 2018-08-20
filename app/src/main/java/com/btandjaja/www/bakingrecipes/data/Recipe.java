@@ -1,43 +1,75 @@
 package com.btandjaja.www.bakingrecipes.data;
 
+import android.text.TextUtils;
+
 import java.util.ArrayList;
 
 public class Recipe {
+    private static int mStep, mServings;
     private static String mRecipeName, mImagePath;
-    private static ArrayList<String> mIngredients, mSteps;
+    private static ArrayList<String> mIngredients, mShortDescription, mDescription, mVideoUrl, mThumbnailUrl;
 
-    public Recipe(String recipeName, String imagePath) {
-        mRecipeName = recipeName;
-        mImagePath = imagePath;
-        mIngredients = new ArrayList<String>();
-        mSteps = new ArrayList<String>();
+    public Recipe() {
+        mStep = 0; mServings= 0;
+        mRecipeName = null; mImagePath = null;
+        mIngredients = new ArrayList<>();
+        mShortDescription = new ArrayList<>();
+        mDescription = new ArrayList<>();
+        mVideoUrl = new ArrayList<>();
+        mThumbnailUrl = new ArrayList<>();
     }
 
-    public Recipe(String recipeName, String imagePath, ArrayList<String> ingredients, ArrayList<String> steps) {
-        mRecipeName = recipeName;
-        mImagePath = imagePath;
-        mIngredients = ingredients;
-        mSteps = steps;
-    }
-
+    /* setter */
+    public void setServings(int serving) { mServings = serving; }
     public void setRecipeName(String recipeName) { mRecipeName = recipeName; }
-    public void setIngredients(String ingredient) { mIngredients.add(ingredient); }
-    public void setStep(String step) { mSteps.add(step); }
-    public void setImagePath(String imagePath) { mImagePath = imagePath; }
+    public void setImagePath(String imagePath) { mImagePath = checkValidString(imagePath); }
+    public void setIngredient(String ingredient) { mIngredients.add(ingredient); }
+    public void setIngredients(ArrayList<String> ingredients) { mIngredients = ingredients; }
+    public void setShortDescription(String shortDescription) { mShortDescription.add(shortDescription); }
+    public void setDescription(String description) { mDescription.add(description); }
+    public void setVideoUrl(String videoUrl) { mVideoUrl.add(checkValidString(videoUrl)); }
+    public void setThumbnailUrl(String thumbnailUrl) { mThumbnailUrl.add(checkValidString(thumbnailUrl)); }
 
+    /* getter */
+    public int getServings() { return mServings; }
     public String getRecipeName() { return mRecipeName; }
-    public String getIngredients() { return stringCombineHelper(mIngredients); }
     public String getImagePath() { return mImagePath; }
+    public String getIngredientsString() { return stringCombineHelper(mIngredients); }
     public ArrayList<String> getIngredientsArrList() { return mIngredients; }
-    public ArrayList<String> getSteps() { return mSteps; }
+    public String getShortDescription() { return mShortDescription.get(mStep); }
+    public String getDescription() { return mDescription.get(mStep); }
+    public String getVideoUrl() { return mVideoUrl.get(mStep); }
+    public String getThumbnailUrl() { return mThumbnailUrl.get(mStep); }
+
+    /* helper methods */
+    public void nextStep() { mStep++; }
 
     private String stringCombineHelper(ArrayList<String> stringList) {
-        // TODO need to combine the recipes into a step by step sentence
-        return "testing";
+        String result = "";
+        for (int i = 0; i < stringList.size(); i++) {
+            result += stringList.get(i);
+            if ( i < stringList.size() - 1 ) {
+                result += "\n";
+            }
+        }
+        return result;
+    }
+
+    private String checkValidString(String validString) {
+        if (validString == null || TextUtils.isEmpty(validString)) return null;
+        return validString;
     }
 
     public static Recipe copyRecipe(Recipe recipe) {
-        return new Recipe(recipe.getRecipeName(), recipe.getImagePath(),
-                recipe.getIngredientsArrList(), recipe.getSteps());
+        Recipe recipeCopy = new Recipe();
+        recipeCopy.setServings(recipe.getServings());
+        recipeCopy.setRecipeName(recipe.getRecipeName());
+        recipeCopy.setImagePath(recipe.getImagePath());
+        recipeCopy.setIngredients(recipe.getIngredientsArrList());
+        recipeCopy.setShortDescription(recipe.getShortDescription());
+        recipeCopy.setDescription(recipe.getDescription());
+        recipeCopy.setVideoUrl(recipe.getVideoUrl());
+        recipeCopy.setThumbnailUrl(recipe.getThumbnailUrl());
+        return recipeCopy;
     }
 }

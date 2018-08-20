@@ -1,17 +1,31 @@
 <resources>
     <!-- Network Utils -->
     <string name="app_name">Baking Recipes</string>
+    <!--<string name="scheme">http</string>-->
+    <!--<string name="authority">go.udacity.com</string>-->
+    <!--<string name="append_path">android-baking-app-json</string>-->
     <string name="scheme">https</string>
     <string name="authority">d17h27t6h515a5.cloudfront.net</string>
-    <string name="append_path_1">topher</string>
-    <string name="append_path_2">2017</string>
-    <string name="append_path_3">May</string>
-    <string name="append_path_4">59121517_baking</string>
-    <string name="append_path_5">baking.json</string>
+    <string name="append_path">topher/2017/May/59121517_baking/baking.json</string>
 
     <!-- List of Recipes Activity-->
     <string name="error">Failed to load data!\nPlease check internet
         \nconnection and try again!</string>
     <string name="query_loader">1001</string>
     <string name="query">query</string>
+
+    <!-- RecipesUtils -->
+    <string name="id">id</string>
+    <string name="name">name</string>
+    <string name="ingredients">ingredients</string>
+    <string name="steps">steps</string>
+    <string name="quantity">quantity</string>
+    <string name="measure">measure</string>
+    <string name="ingredient">ingredient</string>
+    <string name="short_description">shortDescription</string>
+    <string name="description">description</string>
+    <string name="video_url">videoURL</string>
+    <string name="thumbnail_url">thumbnailURL</string>
+    <string name="servings">servings</string>
+    <string name="image">image</string>
 </resources>

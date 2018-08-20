@@ -1,5 +1,6 @@
 package com.btandjaja.www.bakingrecipes;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
@@ -7,28 +8,34 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.btandjaja.www.bakingrecipes.data.Recipe;
+import com.btandjaja.www.bakingrecipes.data.RecipesAdapter;
 import com.btandjaja.www.bakingrecipes.utilities.NetworkUtils;
 import com.btandjaja.www.bakingrecipes.utilities.RecipesUtils;
 
 import java.net.URL;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ListOfRecipesActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String> {
+public class ListOfRecipesActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String>,RecipesAdapter.RecipeAdapterOnClickHandler {
     @BindView(R.id.tv_error_main_activity) TextView mError;
     @BindView(R.id.pb_view) ProgressBar mIndicator;
     @BindView(R.id.rv_recipe_list) RecyclerView mRecyclerView;
-    @BindView(R.id.iv_recipe_snapshot) ImageView mRecipeSnapShot;
-    @BindView(R.id.tv_brief_recipe_info) TextView mRecipeInfo;
+//    @BindView(R.id.iv_recipe_snapshot) ImageView mRecipeSnapShot;
+//    @BindView(R.id.tv_brief_recipe_info) TextView mRecipeInfo;
 
     private URL mUrl;
+    private RecipesAdapter mRecipeAdapter;
+    private ArrayList<Recipe> mRecipesList;
 
 
     @Override
@@ -36,17 +43,35 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_recipes);
         ButterKnife.bind(this);
-        setAdapter();
+        createAdapter();
         setRecyclerView();
-        getUrl();
+        loadRecipeData();
         getSupportLoaderManager().initLoader(queryLoader(), null, this);
     }
 
-    public void setAdapter() { }
-    public void setRecyclerView() {
+    private void createAdapter() { mRecipeAdapter = new RecipesAdapter(this); }
 
+    private void setRecyclerView() {
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
+        mRecyclerView.setAdapter(mRecipeAdapter);
     }
-    private void getUrl() { mUrl = NetworkUtils.buildUrl(this); }
+
+    private void loadRecipeData() {
+        showData();
+        restartLoader();
+    }
+
+    private void restartLoader() {
+        mUrl = NetworkUtils.buildUrl(this);
+        Bundle bundle = new Bundle();
+        bundle.putString(queryString(), mUrl.toString());
+        LoaderManager loaderManager = getSupportLoaderManager();
+        if(loaderManager.getLoader(queryLoader()) == null) {
+            loaderManager.initLoader(queryLoader(), bundle, this);
+        } else {
+            loaderManager.restartLoader(queryLoader(), bundle, this);
+        }
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -72,19 +97,36 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
             @Nullable
             @Override
             public String loadInBackground() {
-                return RecipesUtils.getRecipesList( args.getString(queryString()) );
+                return RecipesUtils.getRecipesListJsonString( args.getString(queryString()) );
             }
         };
     }
 
     @Override
-    public void onLoadFinished(@NonNull Loader<String> loader, String s) {
+    public void onLoadFinished(@NonNull Loader<String> loader, String jsonString) {
         mIndicator.setVisibility(View.INVISIBLE);
+        if (jsonString == null || TextUtils.isEmpty(jsonString)) {
+            showError();
+            return;
+        }
+        RecipesUtils.getRecipesList(this, jsonString, mRecipesList);
+        setAdapter();
+        showData();
+        mError.setText(jsonString);
     }
 
+    /**
+     * Needed, but not used.
+     * @param loader
+     */
     @Override
     public void onLoaderReset(@NonNull Loader<String> loader) {
 
+    }
+
+    public void setAdapter() {
+        mRecipeAdapter.setRecipeList(this, mRecipesList);
+        mRecyclerView.setAdapter(mRecipeAdapter);
     }
 
     public void showData() {
@@ -99,4 +141,12 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
 
     private int queryLoader() { return Integer.parseInt(getString(R.string.query_loader)); }
     private String queryString() { return getString(R.string.query); }
+
+    @Override
+    public void onClick(Recipe recipe) {
+        // TODO create new activity
+        Intent intent = new Intent(this, DetailActivity.class);
+        // TODO put any extras
+        startActivity(intent);
+    }
 }

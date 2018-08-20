@@ -14,6 +14,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeViewHolder> {
+    /* declarations */
     private Context mContext;
     private static ArrayList<Recipe> mRecipesList;
     private static RecipeAdapterOnClickHandler mClickHandler;
@@ -56,10 +57,9 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
 
     /* view holder */
     public class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
         private final ImageView mRecipeSnapShot;
 
-        public RecipeViewHolder(@NonNull View itemView) {
+        private RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
             this.mRecipeSnapShot = itemView.findViewById(R.id.iv_recipe_snapshot);
             itemView.setOnClickListener(this);

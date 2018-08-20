@@ -25,11 +25,7 @@ public class NetworkUtils {
         Uri.Builder builder = new Uri.Builder();
         builder.scheme(context.getString(R.string.scheme))
                 .authority(context.getString(R.string.authority))
-                .appendPath(context.getString(R.string.append_path_1))
-                .appendPath(context.getString(R.string.append_path_2))
-                .appendPath(context.getString(R.string.append_path_3))
-                .appendPath(context.getString(R.string.append_path_4))
-                .appendPath(context.getString(R.string.append_path_5));
+                .appendPath(context.getString(R.string.append_path));
         URL url = null;
         try {
             url = new URL(URLDecoder.decode(builder.build().toString(), "UTF-8"));
