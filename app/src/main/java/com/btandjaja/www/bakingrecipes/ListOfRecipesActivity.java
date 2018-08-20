@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -30,25 +31,28 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
     @BindView(R.id.tv_error_main_activity) TextView mError;
     @BindView(R.id.pb_view) ProgressBar mIndicator;
     @BindView(R.id.rv_recipe_list) RecyclerView mRecyclerView;
-//    @BindView(R.id.iv_recipe_snapshot) ImageView mRecipeSnapShot;
-//    @BindView(R.id.tv_brief_recipe_info) TextView mRecipeInfo;
 
     private URL mUrl;
     private RecipesAdapter mRecipeAdapter;
     private ArrayList<Recipe> mRecipesList;
 
+    private static final String TAG = ListOfRecipesActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_recipes);
         ButterKnife.bind(this);
+        initializeValirable();
         createAdapter();
         setRecyclerView();
         loadRecipeData();
         getSupportLoaderManager().initLoader(queryLoader(), null, this);
     }
 
+    private void initializeValirable() {
+        mRecipesList = new ArrayList<>();
+    }
     private void createAdapter() { mRecipeAdapter = new RecipesAdapter(this); }
 
     private void setRecyclerView() {
@@ -112,7 +116,6 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
         RecipesUtils.getRecipesList(this, jsonString, mRecipesList);
         setAdapter();
         showData();
-        mError.setText(jsonString);
     }
 
     /**
@@ -126,6 +129,11 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
 
     public void setAdapter() {
         mRecipeAdapter.setRecipeList(this, mRecipesList);
+        for (int i = 0; i < mRecipesList.size(); i++) {
+            String name = mRecipesList.get(i).getRecipeName();
+            ArrayList<String> ingredients = mRecipesList.get(i).getIngredientsArrList();
+            Log.d(TAG, "*******testing");
+        }
         mRecyclerView.setAdapter(mRecipeAdapter);
     }
 

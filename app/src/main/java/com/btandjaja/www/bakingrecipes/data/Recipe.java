@@ -10,13 +10,13 @@ public class Recipe {
     private static ArrayList<String> mIngredients, mShortDescription, mDescription, mVideoUrl, mThumbnailUrl;
 
     public Recipe() {
-        mStep = 0; mServings= 0;
-        mRecipeName = null; mImagePath = null;
-        mIngredients = new ArrayList<>();
-        mShortDescription = new ArrayList<>();
-        mDescription = new ArrayList<>();
-        mVideoUrl = new ArrayList<>();
-        mThumbnailUrl = new ArrayList<>();
+        mRecipeName = null;
+        constructorHelper();
+    }
+
+    public Recipe(String recipeName) {
+        mRecipeName = recipeName;
+        constructorHelper();
     }
 
     /* setter */
@@ -42,6 +42,19 @@ public class Recipe {
     public String getThumbnailUrl() { return mThumbnailUrl.get(mStep); }
 
     /* helper methods */
+    public static Recipe copyRecipe(Recipe recipe) {
+        Recipe recipeCopy = new Recipe();
+        recipeCopy.setServings(recipe.getServings());
+        recipeCopy.setRecipeName(recipe.getRecipeName());
+        recipeCopy.setImagePath(recipe.getImagePath());
+        recipeCopy.setIngredients(recipe.getIngredientsArrList());
+        recipeCopy.setShortDescription(recipe.getShortDescription());
+        recipeCopy.setDescription(recipe.getDescription());
+        recipeCopy.setVideoUrl(recipe.getVideoUrl());
+        recipeCopy.setThumbnailUrl(recipe.getThumbnailUrl());
+        return recipeCopy;
+    }
+
     public void nextStep() { mStep++; }
 
     private String stringCombineHelper(ArrayList<String> stringList) {
@@ -60,16 +73,13 @@ public class Recipe {
         return validString;
     }
 
-    public static Recipe copyRecipe(Recipe recipe) {
-        Recipe recipeCopy = new Recipe();
-        recipeCopy.setServings(recipe.getServings());
-        recipeCopy.setRecipeName(recipe.getRecipeName());
-        recipeCopy.setImagePath(recipe.getImagePath());
-        recipeCopy.setIngredients(recipe.getIngredientsArrList());
-        recipeCopy.setShortDescription(recipe.getShortDescription());
-        recipeCopy.setDescription(recipe.getDescription());
-        recipeCopy.setVideoUrl(recipe.getVideoUrl());
-        recipeCopy.setThumbnailUrl(recipe.getThumbnailUrl());
-        return recipeCopy;
+    private void constructorHelper() {
+        mStep = 0; mServings= 0;
+        mImagePath = null;
+        mIngredients = new ArrayList<>();
+        mShortDescription = new ArrayList<>();
+        mDescription = new ArrayList<>();
+        mVideoUrl = new ArrayList<>();
+        mThumbnailUrl = new ArrayList<>();
     }
 }

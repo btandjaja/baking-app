@@ -7,11 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.btandjaja.www.bakingrecipes.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeViewHolder> {
     /* declarations */
@@ -33,8 +37,33 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
     @Override
     public void onBindViewHolder(@NonNull RecipeViewHolder recipeViewHolder, int position) {
         Recipe recipe = mRecipesList.get(position);
-        if (recipe == null) return;
-        Picasso.with(mContext).load(recipe.getImagePath()).into(recipeViewHolder.mRecipeSnapShot);
+        boolean noImage = recipe.getImagePath() == null;
+        int imageDrawable;
+
+        switch (position) {
+            case 0:
+                imageDrawable = R.drawable.nutella_pie;
+                break;
+            case 1:
+                imageDrawable = R.drawable.brownies;
+                break;
+            case 2:
+                imageDrawable = R.drawable.moist_yellow_cake;
+                break;
+            case 3:
+                imageDrawable = R.drawable.cheese_cake;
+                break;
+            default:
+                imageDrawable = R.drawable.no_image;
+                break;
+        }
+
+        if (noImage) {
+            Picasso.with(mContext).load(recipe.getImagePath()).into(recipeViewHolder.mRecipeSnapShot);
+        } else {
+            Picasso.with(mContext).load(imageDrawable).into(recipeViewHolder.mRecipeSnapShot);
+        }
+        recipeViewHolder.mBriefInfo.setText(recipe.getRecipeName());
     }
 
     @Override
@@ -42,7 +71,9 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
         return mRecipesList == null ? 0 : mRecipesList.size();
     }
 
-    public RecipesAdapter(RecipeAdapterOnClickHandler clickHandler) { mClickHandler = clickHandler; }
+    public RecipesAdapter(RecipeAdapterOnClickHandler clickHandler) {
+        mClickHandler = clickHandler;
+    }
 
     public void setRecipeList(Context context, ArrayList<Recipe> recipeList) {
         mContext = context;
@@ -57,12 +88,15 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
 
     /* view holder */
     public class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final ImageView mRecipeSnapShot;
+        @BindView(R.id.iv_recipe_snapshot)
+        ImageView mRecipeSnapShot;
+        @BindView(R.id.tv_brief_recipe_info)
+        TextView mBriefInfo;
 
         private RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.mRecipeSnapShot = itemView.findViewById(R.id.iv_recipe_snapshot);
             itemView.setOnClickListener(this);
+            ButterKnife.bind(this, itemView);
         }
 
         @Override
