@@ -1,10 +1,42 @@
 package com.btandjaja.www.bakingrecipes.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
 
-public class Recipe {
+public class Recipe implements Parcelable{
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+
+        @Override
+        public Object createFromParcel(Parcel parcel) {
+            return new Recipe(parcel);
+        }
+
+        @Override
+        public Object[] newArray(int size) {
+            return new Recipe[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int i) {
+        dest.writeInt(mStep); dest.writeInt(mServings);
+        dest.writeString(mRecipeName); dest.writeString(mImagePath);
+        dest.writeList(mIngredients);
+        dest.writeList(mShortDescription);
+        dest.writeList(mDescription);
+        dest.writeList(mVideoUrl);
+        dest.writeList(mThumbnailUrl);
+    }
+
+    public static final String RECIPE = "recipe";
     private int mStep, mServings;
     private String mRecipeName, mImagePath;
     private ArrayList<String> mIngredients, mShortDescription, mDescription, mVideoUrl, mThumbnailUrl;
@@ -14,10 +46,20 @@ public class Recipe {
         constructorHelper();
     }
 
-    public Recipe(String recipeName) {
-        mRecipeName = recipeName;
-        constructorHelper();
+    public Recipe(Parcel in) {
+        mStep = in.readInt(); mServings = in.readInt();
+        mRecipeName = in.readString(); mImagePath = in.readString();
+        mIngredients = in.readArrayList(null);
+        mShortDescription = in.readArrayList(null);
+        mDescription = in.readArrayList(null);
+        mVideoUrl = in.readArrayList(null);
+        mThumbnailUrl = in.readArrayList(null);
     }
+
+//    public Recipe(String recipeName) {
+//        mRecipeName = recipeName;
+//        constructorHelper();
+//    }
 
     /* setter */
     public void setServings(int serving) { mServings = serving; }

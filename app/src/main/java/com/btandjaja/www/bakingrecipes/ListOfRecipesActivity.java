@@ -147,9 +147,8 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
 
     @Override
     public void onClick(Recipe recipe) {
-        // TODO create new activity
         Intent intent = new Intent(this, DetailActivity.class);
-        // TODO put any extras
+        intent.putExtra(Recipe.RECIPE, recipe);
         startActivity(intent);
     }
 }
