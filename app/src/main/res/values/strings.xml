@@ -1,4 +1,13 @@
 <resources>
+    <!-- List of Recipes Activity-->
+    <string name="error">Failed to load data!\nPlease check internet
+        \nconnection and try again!</string>
+    <string name="query_loader">1001</string>
+    <string name="query">query</string>
+
+    <!-- Detail Activity -->
+    <string name="instruction">Instruction</string>
+
     <!-- Network Utils -->
     <string name="app_name">Baking Recipes</string>
     <!--<string name="scheme">http</string>-->
@@ -8,13 +17,7 @@
     <string name="authority">d17h27t6h515a5.cloudfront.net</string>
     <string name="append_path">topher/2017/May/59121517_baking/baking.json</string>
 
-    <!-- List of Recipes Activity-->
-    <string name="error">Failed to load data!\nPlease check internet
-        \nconnection and try again!</string>
-    <string name="query_loader">1001</string>
-    <string name="query">query</string>
-
-    <!-- RecipesUtils -->
+    <!-- Recipes Utils -->
     <string name="id">id</string>
     <string name="name">name</string>
     <string name="ingredients">ingredients</string>
@@ -28,4 +31,10 @@
     <string name="thumbnail_url">thumbnailURL</string>
     <string name="servings">servings</string>
     <string name="image">image</string>
+
+    <!-- Recipe Adapter -->
+    <string name="nutella_pie">Nutella Pie</string>
+    <string name="brownies">Brownies</string>
+    <string name="yellow_cake">Yellow Cake</string>
+    <string name="cheesecake">Cheesecake</string>
 </resources>

@@ -20,8 +20,8 @@ import butterknife.ButterKnife;
 public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeViewHolder> {
     /* declarations */
     private Context mContext;
-    private static ArrayList<Recipe> mRecipesList;
-    private static RecipeAdapterOnClickHandler mClickHandler;
+    private ArrayList<Recipe> mRecipesList;
+    private RecipeAdapterOnClickHandler mClickHandler;
 
     @NonNull
     @Override
@@ -37,33 +37,24 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
     @Override
     public void onBindViewHolder(@NonNull RecipeViewHolder recipeViewHolder, int position) {
         Recipe recipe = mRecipesList.get(position);
-        boolean noImage = recipe.getImagePath() == null;
+        String recipeName = recipe.getRecipeName();
         int imageDrawable;
-
-        switch (position) {
-            case 0:
-                imageDrawable = R.drawable.nutella_pie;
-                break;
-            case 1:
-                imageDrawable = R.drawable.brownies;
-                break;
-            case 2:
-                imageDrawable = R.drawable.moist_yellow_cake;
-                break;
-            case 3:
-                imageDrawable = R.drawable.cheese_cake;
-                break;
-            default:
-                imageDrawable = R.drawable.no_image;
-                break;
-        }
-
-        if (noImage) {
-            Picasso.with(mContext).load(recipe.getImagePath()).into(recipeViewHolder.mRecipeSnapShot);
+        /* get image */
+        if (recipeName.equals(mContext.getString(R.string.nutella_pie))) {
+            imageDrawable = R.drawable.nutella_pie;
+        } else if (recipeName.equals(mContext.getString(R.string.brownies))) {
+            imageDrawable = R.drawable.brownies;
+        } else if (recipeName.equals(mContext.getString(R.string.yellow_cake))) {
+            imageDrawable = R.drawable.moist_yellow_cake;
+        } else if (recipeName.equals(mContext.getString(R.string.cheesecake))) {
+            imageDrawable = R.drawable.cheese_cake;
         } else {
-            Picasso.with(mContext).load(imageDrawable).into(recipeViewHolder.mRecipeSnapShot);
+            imageDrawable = R.drawable.no_image;
         }
-        recipeViewHolder.mBriefInfo.setText(recipe.getRecipeName());
+        /* set image */
+        Picasso.with(mContext).load(imageDrawable).into(recipeViewHolder.mRecipeSnapShot);
+        /* set recipe name */
+        recipeViewHolder.mRecipeName.setText(recipe.getRecipeName());
     }
 
     @Override
@@ -90,8 +81,8 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
     public class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.iv_recipe_snapshot)
         ImageView mRecipeSnapShot;
-        @BindView(R.id.tv_brief_recipe_info)
-        TextView mBriefInfo;
+        @BindView(R.id.tv_recipe_name)
+        TextView mRecipeName;
 
         private RecipeViewHolder(@NonNull View itemView) {
             super(itemView);

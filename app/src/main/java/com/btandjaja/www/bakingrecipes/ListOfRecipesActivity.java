@@ -36,7 +36,7 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
     private RecipesAdapter mRecipeAdapter;
     private ArrayList<Recipe> mRecipesList;
 
-    private static final String TAG = ListOfRecipesActivity.class.getSimpleName();
+    private final String TAG = ListOfRecipesActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,11 +129,6 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
 
     public void setAdapter() {
         mRecipeAdapter.setRecipeList(this, mRecipesList);
-        for (int i = 0; i < mRecipesList.size(); i++) {
-            String name = mRecipesList.get(i).getRecipeName();
-            ArrayList<String> ingredients = mRecipesList.get(i).getIngredientsArrList();
-            Log.d(TAG, "*******testing");
-        }
         mRecyclerView.setAdapter(mRecipeAdapter);
     }
 

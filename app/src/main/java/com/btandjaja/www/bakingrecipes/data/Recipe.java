@@ -5,9 +5,9 @@ import android.text.TextUtils;
 import java.util.ArrayList;
 
 public class Recipe {
-    private static int mStep, mServings;
-    private static String mRecipeName, mImagePath;
-    private static ArrayList<String> mIngredients, mShortDescription, mDescription, mVideoUrl, mThumbnailUrl;
+    private int mStep, mServings;
+    private String mRecipeName, mImagePath;
+    private ArrayList<String> mIngredients, mShortDescription, mDescription, mVideoUrl, mThumbnailUrl;
 
     public Recipe() {
         mRecipeName = null;
