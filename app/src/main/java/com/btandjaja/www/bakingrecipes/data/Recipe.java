@@ -56,11 +56,6 @@ public class Recipe implements Parcelable{
         mThumbnailUrl = in.readArrayList(null);
     }
 
-//    public Recipe(String recipeName) {
-//        mRecipeName = recipeName;
-//        constructorHelper();
-//    }
-
     /* setter */
     public void setServings(int serving) { mServings = serving; }
     public void setRecipeName(String recipeName) { mRecipeName = recipeName; }
@@ -98,6 +93,8 @@ public class Recipe implements Parcelable{
     }
 
     public void nextStep() { mStep++; }
+
+    public void resetStep() { mStep = 0; }
 
     private String stringCombineHelper(ArrayList<String> stringList) {
         String result = "";
