@@ -79,10 +79,8 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
 
     /* view holder */
     public class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @BindView(R.id.iv_recipe_snapshot)
-        ImageView mRecipeSnapShot;
-        @BindView(R.id.tv_recipe_name)
-        TextView mRecipeName;
+        @BindView(R.id.iv_recipe_snapshot) ImageView mRecipeSnapShot;
+        @BindView(R.id.tv_recipe_name) TextView mRecipeName;
 
         private RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
