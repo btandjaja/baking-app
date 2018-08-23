@@ -96,6 +96,7 @@ public class InstructionAdapter extends RecyclerView.Adapter<InstructionAdapter.
 
         public InstructionViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             ButterKnife.bind(this, itemView);
         }
 
