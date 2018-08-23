@@ -51,12 +51,12 @@ public class RecipesUtils {
                 for(int j = 0; j < stepsJsonArr.length(); j++) {
                     JSONObject stepElement = stepsJsonArr.getJSONObject(j);
                     String shortDescription = stepElement.getString(context.getString(R.string.short_description));
-                    String description = stepElement.getString(context.getString(R.string.description));
-                    String videoUrl = stepElement.getString(context.getString(R.string.video_url));
-                    String thumbnailUrl = stepElement.getString(context.getString(R.string.thumbnail_url));
                     recipe.setShortDescription(shortDescription);
+                    String description = stepElement.getString(context.getString(R.string.description));
                     recipe.setDescription(description);
+                    String videoUrl = stepElement.getString(context.getString(R.string.video_url));
                     recipe.setVideoUrl(videoUrl);
+                    String thumbnailUrl = stepElement.getString(context.getString(R.string.thumbnail_url));
                     recipe.setThumbnailUrl(thumbnailUrl);
                 }
 

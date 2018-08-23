@@ -22,9 +22,8 @@
         <activity
             android:name=".DetailActivity"
             android:label="@string/instruction"
-            android:parentActivityName=".ListOfRecipesActivity">
-
-        </activity>
+            android:parentActivityName=".ListOfRecipesActivity"></activity>
+        <activity android:name=".VideoActivity"></activity>
     </application>
 
 </manifest>

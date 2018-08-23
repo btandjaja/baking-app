@@ -23,6 +23,8 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
     private ArrayList<Recipe> mRecipesList;
     private RecipeAdapterOnClickHandler mClickHandler;
 
+    public RecipesAdapter(RecipeAdapterOnClickHandler clickHandler) { mClickHandler = clickHandler; }
+
     @NonNull
     @Override
     public RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -37,6 +39,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
     @Override
     public void onBindViewHolder(@NonNull RecipeViewHolder recipeViewHolder, int position) {
         Recipe recipe = mRecipesList.get(position);
+        if (recipe == null) return;
         String recipeName = recipe.getRecipeName();
         int imageDrawable;
         /* get image */
@@ -60,10 +63,6 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
     @Override
     public int getItemCount() {
         return mRecipesList == null ? 0 : mRecipesList.size();
-    }
-
-    public RecipesAdapter(RecipeAdapterOnClickHandler clickHandler) {
-        mClickHandler = clickHandler;
     }
 
     public void setRecipeList(Context context, ArrayList<Recipe> recipeList) {

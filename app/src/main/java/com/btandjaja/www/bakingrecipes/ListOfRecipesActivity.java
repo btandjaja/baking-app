@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -35,8 +34,6 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
     private URL mUrl;
     private RecipesAdapter mRecipeAdapter;
     private ArrayList<Recipe> mRecipesList;
-
-    private final String TAG = ListOfRecipesActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

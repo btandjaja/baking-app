@@ -27,7 +27,7 @@ public class Recipe implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int i) {
-        dest.writeInt(mStep); dest.writeInt(mServings);
+        dest.writeInt(mServings);
         dest.writeString(mRecipeName); dest.writeString(mImagePath);
         dest.writeList(mIngredients);
         dest.writeList(mShortDescription);
@@ -37,7 +37,7 @@ public class Recipe implements Parcelable{
     }
 
     public static final String RECIPE = "recipe";
-    private int mStep, mServings;
+    private int mServings;
     private String mRecipeName, mImagePath;
     private ArrayList<String> mIngredients, mShortDescription, mDescription, mVideoUrl, mThumbnailUrl;
 
@@ -47,7 +47,7 @@ public class Recipe implements Parcelable{
     }
 
     public Recipe(Parcel in) {
-        mStep = in.readInt(); mServings = in.readInt();
+        mServings = in.readInt();
         mRecipeName = in.readString(); mImagePath = in.readString();
         mIngredients = in.readArrayList(null);
         mShortDescription = in.readArrayList(null);
@@ -66,6 +66,10 @@ public class Recipe implements Parcelable{
     public void setDescription(String description) { mDescription.add(description); }
     public void setVideoUrl(String videoUrl) { mVideoUrl.add(checkValidString(videoUrl)); }
     public void setThumbnailUrl(String thumbnailUrl) { mThumbnailUrl.add(checkValidString(thumbnailUrl)); }
+    public void setShortDescriptionList(ArrayList<String> shortDescriptionList) { mShortDescription = shortDescriptionList; }
+    public void setDescriptionList(ArrayList<String> descriptionList) { mDescription = descriptionList; }
+    public void setVideoUrlList(ArrayList<String> videoUrlList) { mVideoUrl = videoUrlList; }
+    public void setThumbnailUrlList(ArrayList<String> thumbnailUrlList) { mThumbnailUrl = thumbnailUrlList; }
 
     /* getter */
     public int getServings() { return mServings; }
@@ -73,10 +77,10 @@ public class Recipe implements Parcelable{
     public String getImagePath() { return mImagePath; }
     public String getIngredientsString() { return stringCombineHelper(mIngredients); }
     public ArrayList<String> getIngredientsArrList() { return mIngredients; }
-    public String getShortDescription() { return mShortDescription.get(mStep); }
-    public String getDescription() { return mDescription.get(mStep); }
-    public String getVideoUrl() { return mVideoUrl.get(mStep); }
-    public String getThumbnailUrl() { return mThumbnailUrl.get(mStep); }
+    public ArrayList<String> getShortDescriptionList() { return mShortDescription; }
+    public ArrayList<String> getDescriptionList() { return mDescription; }
+    public ArrayList<String> getVideoUrlList() { return mVideoUrl; }
+    public ArrayList<String> getThumbnailUrlList() { return mThumbnailUrl; }
 
     /* helper methods */
     public static Recipe copyRecipe(Recipe recipe) {
@@ -85,16 +89,14 @@ public class Recipe implements Parcelable{
         recipeCopy.setRecipeName(recipe.getRecipeName());
         recipeCopy.setImagePath(recipe.getImagePath());
         recipeCopy.setIngredients(recipe.getIngredientsArrList());
-        recipeCopy.setShortDescription(recipe.getShortDescription());
-        recipeCopy.setDescription(recipe.getDescription());
-        recipeCopy.setVideoUrl(recipe.getVideoUrl());
-        recipeCopy.setThumbnailUrl(recipe.getThumbnailUrl());
+        recipeCopy.setShortDescriptionList(recipe.getShortDescriptionList());
+        recipeCopy.setDescriptionList(recipe.getDescriptionList());
+        recipeCopy.setVideoUrlList(recipe.getVideoUrlList());
+        recipeCopy.setThumbnailUrlList(recipe.getThumbnailUrlList());
         return recipeCopy;
     }
 
-    public void nextStep() { mStep++; }
-
-    public void resetStep() { mStep = 0; }
+    public int getSteps() { return mDescription.size(); }
 
     private String stringCombineHelper(ArrayList<String> stringList) {
         String result = "";
@@ -108,12 +110,12 @@ public class Recipe implements Parcelable{
     }
 
     private String checkValidString(String validString) {
-        if (validString == null || TextUtils.isEmpty(validString)) return null;
+        if (validString == null || TextUtils.isEmpty(validString)) return "";
         return validString;
     }
 
     private void constructorHelper() {
-        mStep = 0; mServings= 0;
+        mServings= 0;
         mImagePath = null;
         mIngredients = new ArrayList<>();
         mShortDescription = new ArrayList<>();
