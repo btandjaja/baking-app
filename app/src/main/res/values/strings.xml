@@ -42,4 +42,7 @@
     <!-- instruction adapter -->
     <string name="video_available">Video Available</string>
     <string name="video_not_available">No Video Available</string>
+
+    <!-- video activity-->
+    <string name="activity_title_video">VIDEO</string>
 </resources>
