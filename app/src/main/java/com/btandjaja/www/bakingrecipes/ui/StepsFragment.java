@@ -13,29 +13,21 @@ import android.widget.Toast;
 
 import com.btandjaja.www.bakingrecipes.R;
 import com.btandjaja.www.bakingrecipes.data.InstructionAdapter;
+import com.btandjaja.www.bakingrecipes.data.Recipe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class StepsFragment extends Fragment implements InstructionAdapter.RecipeOnClickHandler{
+public class StepsFragment extends Fragment {
     // define a new interface OnStepClickListener that triggers a callback to the host activity
     OnStepClickListener mCallback;
+    Recipe mRecipe;
 
-    @BindView(R.id.rv_recipe_instruction_list)
-    RecyclerView mRecyclerView;
-
-    // TODO remove
-    private final String TAG = StepsFragment.class.getSimpleName();
-
-    @Override
-    public void OnClick(String videoUrl) {
-        // TODO when the video is click, send the video link
-        Toast.makeText(getContext(), "*****Inside fragment ******", Toast.LENGTH_LONG).show();
-    }
+    @BindView(R.id.rv_recipe_instruction_list) RecyclerView mRecyclerView;
 
     // OnStepClickListener interface, calls a method in the host activity named onStepSelected
     public interface OnStepClickListener {
-        void onStepSelected(int position);
+        void onStepSelected(Recipe recipe);
     }
 
     // Override onAttach to make sure that the container activity has implemented the callback
@@ -59,8 +51,13 @@ public class StepsFragment extends Fragment implements InstructionAdapter.Recipe
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_recipe_steps_list, container, false);
         ButterKnife.bind(getContext(), rootView);
-        InstructionAdapter instructionAdapter = new InstructionAdapter((InstructionAdapter.RecipeOnClickHandler) getContext());
+        InstructionAdapter instructionAdapter = new InstructionAdapter(getContext(), mRecipe);
         mRecyclerView.setAdapter(instructionAdapter);
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putParcelable(Recipe.RECIPE, mRecipe);
     }
 }
