@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:stretchMode="spacingWidthUniform"
-        android:background="@android:color/holo_blue_light"/>
+        android:background="@color/list_of_recipes_background"/>
 
     <ProgressBar
         android:id="@+id/pb_view"

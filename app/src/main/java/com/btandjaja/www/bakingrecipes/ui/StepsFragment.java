@@ -56,7 +56,10 @@ public class StepsFragment extends Fragment {
         mRecipe = DetailActivity.mRecipe;
         mRecipeName.setText(mRecipe.getRecipeName());
         InstructionAdapter instructionAdapter = new InstructionAdapter(getContext(), mRecipe);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
+        // default GridLayout columns
+        int spanCount = 1;
+        if (DetailActivity.mTabletMode) { spanCount = 2; }
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
         mRecyclerView.setAdapter(instructionAdapter);
         return rootView;
     }

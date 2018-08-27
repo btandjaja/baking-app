@@ -58,7 +58,7 @@ public class InstructionAdapter extends RecyclerView.Adapter<InstructionAdapter.
             });
         } else {
             // TODO tablet mode show the video
-
+            Toast.makeText(context, "tablet mode", Toast.LENGTH_SHORT).show();
         }
         return viewHolder;
     }
