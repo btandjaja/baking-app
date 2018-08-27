@@ -9,8 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.TextView;
 
+import com.btandjaja.www.bakingrecipes.DetailActivity;
 import com.btandjaja.www.bakingrecipes.R;
 import com.btandjaja.www.bakingrecipes.data.InstructionAdapter;
 import com.btandjaja.www.bakingrecipes.data.Recipe;
@@ -22,13 +23,10 @@ public class StepsFragment extends Fragment {
     // define a new interface OnStepClickListener that triggers a callback to the host activity
     OnStepClickListener mCallback;
     Recipe mRecipe;
-
     @BindView(R.id.rv_recipe_instruction_list) RecyclerView mRecyclerView;
+    @BindView(R.id.tv_recipe_title) TextView mRecipeName;
 
-    // OnStepClickListener interface, calls a method in the host activity named onStepSelected
-    public interface OnStepClickListener {
-        void onStepSelected(Recipe recipe);
-    }
+    public StepsFragment() {}
 
     // Override onAttach to make sure that the container activity has implemented the callback
     @Override
@@ -44,13 +42,18 @@ public class StepsFragment extends Fragment {
         }
     }
 
-    public StepsFragment() {}
+    // OnStepClickListener interface, calls a method in the host activity named onStepSelected
+    public interface OnStepClickListener {
+        void onStepSelected(String videoUrl, int step, String recipeName);
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_recipe_steps_list, container, false);
-        ButterKnife.bind(getContext(), rootView);
+        ButterKnife.bind(this,rootView);
+        mRecipe = DetailActivity.mRecipe;
+        mRecipeName.setText(mRecipe.getRecipeName());
         InstructionAdapter instructionAdapter = new InstructionAdapter(getContext(), mRecipe);
         mRecyclerView.setAdapter(instructionAdapter);
         return rootView;

@@ -1,33 +1,69 @@
 package com.btandjaja.www.bakingrecipes;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
+import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.upstream.BandwidthMeter;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.TransferListener;
+import com.google.android.exoplayer2.util.Util;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class VideoActivity extends AppCompatActivity {
     private final String KEY_PLAY_WHEN_READY = "play_when_ready";
     private final String KEY_WINDOW = "window";
     private final String KEY_POSITION = "position";
 
-    private String mVideoUrl;
-    private PlayerView mPlayerView;
+    private String mVideoUrl, mRecipeName;
+    private int mStep;
     private SimpleExoPlayer mPlayer;
+    private BandwidthMeter mBandwidthMeter;
+    private DataSource.Factory mMediaDataSourceFactory;
+    private Timeline.Window mWindow;
+    private TrackSelector mTrackSelector;
 
     private boolean mAutoPlay, mPlayWhenReady;
     private long mPlayBackPosition;
     private int mCurrentWindow;
 
+    @BindView(R.id.exoplayer_view)
+    PlayerView mPlayerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video);
+        ButterKnife.bind(this);
         setTitle(getString(R.string.activity_title_video));
         checkSavedInstance(savedInstanceState);
-        getUrl();
+        getUrlPosition();
+        setTitle(getVideoTitle());
+        mAutoPlay = true;
+        mBandwidthMeter = new DefaultBandwidthMeter();
+        mMediaDataSourceFactory = new DefaultDataSourceFactory(this,
+                Util.getUserAgent(this, getResources().getString(R.string.application_name)),
+                (TransferListener<? super DataSource>) mBandwidthMeter);
+
+        mWindow = new Timeline.Window();
+        initializePlayer(Uri.parse(mVideoUrl));
     }
 
     private void checkSavedInstance(Bundle savedInstanceState) {
@@ -42,10 +78,47 @@ public class VideoActivity extends AppCompatActivity {
         }
     }
 
-    private void getUrl() {
+    private void getUrlPosition() {
         Intent intent = getIntent();
-        String extraString = getResources().getString(R.string.video_url);
-        mVideoUrl = intent.hasExtra(extraString) ? intent.getExtras().getString(extraString) : null;
+        String stringUrl = getResources().getString(R.string.video_url);
+        mVideoUrl = intent.hasExtra(stringUrl) ? intent.getExtras().getString(stringUrl) : null;
+        if (mVideoUrl == null) {
+            Toast.makeText(this, "Video may have been removed!", Toast.LENGTH_LONG).show();
+            finish();
+        }
+        // if it has video url, it has step number
+        String stepString = getResources().getString(R.string.step);
+        mStep = intent.getExtras().getInt(stepString);
+
+        String nameString = getResources().getString(R.string.name);
+        mRecipeName = intent.getExtras().getString(nameString);
+    }
+
+    private String getVideoTitle() {
+        return mRecipeName + " " + getResources().getString(R.string.step) + ": " + mStep;
+    }
+
+    private void initializePlayer(Uri mediaUri) {
+        mPlayerView.requestFocus();
+        TrackSelection.Factory videoTrackSelection = new AdaptiveTrackSelection.Factory(mBandwidthMeter);
+        mTrackSelector = new DefaultTrackSelector(videoTrackSelection);
+
+        mPlayer = ExoPlayerFactory.newSimpleInstance(this, mTrackSelector);
+
+        mPlayerView.setPlayer(mPlayer);
+
+        mPlayer.setPlayWhenReady(mAutoPlay);
+
+        MediaSource mediaSource = new ExtractorMediaSource.Factory(mMediaDataSourceFactory)
+                .createMediaSource(mediaUri);
+
+        boolean haveStartPosition = mCurrentWindow != C.INDEX_UNSET;
+
+        if (haveStartPosition) {
+            mPlayer.seekTo(mCurrentWindow, mPlayBackPosition);
+        }
+
+        mPlayer.prepare(mediaSource, !haveStartPosition, false);
     }
 
     @Override
@@ -61,5 +134,19 @@ public class VideoActivity extends AppCompatActivity {
         mPlayBackPosition = mPlayer.getCurrentPosition();
         mCurrentWindow = mPlayer.getCurrentWindowIndex();
         mPlayWhenReady = mPlayer.getPlayWhenReady();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        releasePlayer();
+    }
+
+    private void releasePlayer() {
+        if (mPlayer != null) {
+            mPlayer.stop();
+            mPlayer.release();
+            mPlayer = null;
+        }
     }
 }

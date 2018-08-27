@@ -8,6 +8,7 @@
     <!-- Detail Activity -->
     <string name="instruction">Instruction</string>
     <string name="step">Step</string>
+    <string name="invalid_recipe">Invalid Recipe!</string>
 
     <!-- Network Utils -->
     <string name="app_name">Baking Recipes</string>
@@ -45,4 +46,5 @@
 
     <!-- video activity-->
     <string name="activity_title_video">VIDEO</string>
+    <string name="application_name">media player</string>
 </resources>

@@ -1,24 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<fragment xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="8dp"
-    tools:context=".DetailActivity"
-    android:background="@android:color/holo_green_light">
-
-    <TextView
-        android:id="@+id/tv_recipe_title"
-        style="@style/TextAppearance.AppCompat.Headline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_recipe_instruction"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/black"
-        android:gravity="center"
-        android:stretchMode="spacingWidthUniform" />
-</LinearLayout>
+    android:name="com.btandjaja.www.bakingrecipes.ui.StepsFragment"
+    android:background="@android:color/holo_green_light"/>
