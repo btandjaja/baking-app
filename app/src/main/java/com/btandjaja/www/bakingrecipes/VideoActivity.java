@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.exoplayer2.C;
@@ -39,7 +38,6 @@ public class VideoActivity extends AppCompatActivity {
     private BandwidthMeter mBandwidthMeter;
     private DataSource.Factory mMediaDataSourceFactory;
     private TrackSelector mTrackSelector;
-    private Dialog mFullScreenDialog;
 
     private boolean mAutoPlay, mPlayWhenReady;
     private long mPlayBackPosition;
@@ -63,9 +61,6 @@ public class VideoActivity extends AppCompatActivity {
                 Util.getUserAgent(this, getResources().getString(R.string.application_name)),
                 (TransferListener<? super DataSource>) mBandwidthMeter);
         initializePlayer(Uri.parse(mVideoUrl));
-
-        initializeFullScreenDialog();
-        openFullScreenDialog();
     }
 
     private void checkSavedInstance(Bundle savedInstanceState) {
@@ -121,17 +116,6 @@ public class VideoActivity extends AppCompatActivity {
         }
 
         mPlayer.prepare(mediaSource, !haveStartPosition, false);
-    }
-
-    private void initializeFullScreenDialog() {
-        mFullScreenDialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
-    }
-
-    private void openFullScreenDialog() {
-        ((ViewGroup) mPlayerView.getParent()).removeView(mPlayerView);
-        mFullScreenDialog.addContentView(mPlayerView, new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        mFullScreenDialog.show();
     }
 
     @Override
