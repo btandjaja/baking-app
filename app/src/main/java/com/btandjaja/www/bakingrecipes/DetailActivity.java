@@ -29,17 +29,10 @@ public class DetailActivity extends AppCompatActivity implements StepsFragment.O
         mRecipe = data.getParcelable(Recipe.RECIPE);
     }
 
+    /**
+     * Never called, why?
+     * Moving logic to InstructionAdapter.
+     */
     @Override
-    public void onStepSelected(String videoUrl, int step, String recipeName) {
-        if (TextUtils.isEmpty(videoUrl)) {
-            Toast.makeText(this, getResources().getString(R.string.video_not_available),
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-        Intent intent = new Intent(this, VideoActivity.class);
-        intent.putExtra(getResources().getString(R.string.video_url), videoUrl);
-        intent.putExtra(getResources().getString(R.string.step), step);
-        intent.putExtra(getResources().getString(R.string.name), recipeName);
-        startActivity(intent);
-    }
+    public void onStepSelected(String videoUrl, int step, String recipeName) { }
 }

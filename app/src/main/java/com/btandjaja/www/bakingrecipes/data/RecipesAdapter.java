@@ -61,9 +61,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
     }
 
     @Override
-    public int getItemCount() {
-        return mRecipesList == null ? 0 : mRecipesList.size();
-    }
+    public int getItemCount() { return mRecipesList == null ? 0 : mRecipesList.size(); }
 
     public void setRecipeList(Context context, ArrayList<Recipe> recipeList) {
         mContext = context;
