@@ -6,12 +6,36 @@
     android:orientation="horizontal">
 
     <!-- static recipe steps -->
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="8dp"
+    <fragment
+        android:id="@+id/recipe_steps_list"
         android:name="com.btandjaja.www.bakingrecipes.ui.StepsFragment"
-        android:background="@android:color/holo_green_light"/>
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/holo_green_light"
+        android:orientation="vertical"
+        android:padding="8dp" />
 
+    <!-- divider -->
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray" />
+
+    <!-- LinearLayout arrange video and description -->
+
+    <LinearLayout
+        android:id="@+id/tablet_linear_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/activity_video" />
+
+        <!-- description -->
+        <TextView
+            android:id="@+id/tv_description_tablet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 </LinearLayout>

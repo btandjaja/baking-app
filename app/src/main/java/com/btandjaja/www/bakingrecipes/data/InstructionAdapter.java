@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.btandjaja.www.bakingrecipes.DetailActivity;
 import com.btandjaja.www.bakingrecipes.R;
 import com.btandjaja.www.bakingrecipes.VideoActivity;
 
@@ -35,25 +36,30 @@ public class InstructionAdapter extends RecyclerView.Adapter<InstructionAdapter.
         boolean shouldAttachToParentImmediately = false;
         View view = inflater.inflate(layoutIdStepList, parent, shouldAttachToParentImmediately);
         final StepsViewHolder viewHolder = new StepsViewHolder(view);
-        viewHolder.mCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int position = viewHolder.getAdapterPosition();
-                String videoUrl = mRecipe.getVideoUrlList().get(position);
-                int step = position;
-                String recipeName = mRecipe.getRecipeName();
-                if (TextUtils.isEmpty(videoUrl)) {
-                    Toast.makeText(mContext, mContext.getResources().getString(R.string.video_not_available),
-                            Toast.LENGTH_LONG).show();
-                } else {
-                    Intent intent = new Intent(mContext, VideoActivity.class);
-                    intent.putExtra(mContext.getResources().getString(R.string.video_url), videoUrl);
-                    intent.putExtra(mContext.getResources().getString(R.string.step), step);
-                    intent.putExtra(mContext.getResources().getString(R.string.name), recipeName);
-                    mContext.startActivity(intent);
+        if (!DetailActivity.mTabletMode) {
+            viewHolder.mCardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = viewHolder.getAdapterPosition();
+                    String videoUrl = mRecipe.getVideoUrlList().get(position);
+                    int step = position;
+                    String recipeName = mRecipe.getRecipeName();
+                    if (TextUtils.isEmpty(videoUrl)) {
+                        Toast.makeText(mContext, mContext.getResources().getString(R.string.video_not_available),
+                                Toast.LENGTH_LONG).show();
+                    } else {
+                        Intent intent = new Intent(mContext, VideoActivity.class);
+                        intent.putExtra(mContext.getResources().getString(R.string.video_url), videoUrl);
+                        intent.putExtra(mContext.getResources().getString(R.string.step), step);
+                        intent.putExtra(mContext.getResources().getString(R.string.name), recipeName);
+                        mContext.startActivity(intent);
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            // TODO tablet mode show the video
+
+        }
         return viewHolder;
     }
 

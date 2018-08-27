@@ -9,7 +9,6 @@ import android.widget.Toast;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
@@ -37,10 +36,9 @@ public class VideoActivity extends AppCompatActivity {
     private SimpleExoPlayer mPlayer;
     private BandwidthMeter mBandwidthMeter;
     private DataSource.Factory mMediaDataSourceFactory;
-    private Timeline.Window mWindow;
     private TrackSelector mTrackSelector;
 
-    private boolean mAutoPlay, mPlayWhenReady;
+    private boolean mAutoPlay, mPlayWhenReady, mPlayed;
     private long mPlayBackPosition;
     private int mCurrentWindow;
 
@@ -56,13 +54,12 @@ public class VideoActivity extends AppCompatActivity {
         checkSavedInstance(savedInstanceState);
         getUrlPosition();
         setTitle(getVideoTitle());
+        mPlayed = false;
         mAutoPlay = true;
         mBandwidthMeter = new DefaultBandwidthMeter();
         mMediaDataSourceFactory = new DefaultDataSourceFactory(this,
                 Util.getUserAgent(this, getResources().getString(R.string.application_name)),
                 (TransferListener<? super DataSource>) mBandwidthMeter);
-
-        mWindow = new Timeline.Window();
         initializePlayer(Uri.parse(mVideoUrl));
     }
 
@@ -119,7 +116,10 @@ public class VideoActivity extends AppCompatActivity {
         }
 
         mPlayer.prepare(mediaSource, !haveStartPosition, false);
+
+        mPlayed = true;
     }
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -140,6 +140,12 @@ public class VideoActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         releasePlayer();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mPlayer.stop(true);
     }
 
     private void releasePlayer() {
