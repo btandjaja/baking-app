@@ -7,12 +7,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.btandjaja.www.bakingrecipes.DetailActivity;
+import com.btandjaja.www.bakingrecipes.ListOfRecipesActivity;
 import com.btandjaja.www.bakingrecipes.R;
 import com.btandjaja.www.bakingrecipes.data.InstructionAdapter;
 import com.btandjaja.www.bakingrecipes.data.Recipe;
@@ -45,7 +48,7 @@ public class StepsFragment extends Fragment {
 
     // OnStepClickListener interface, calls a method in the host activity named onStepSelected
     public interface OnStepClickListener {
-        void onStepSelected(String videoUrl, int step, String recipeName);
+        void onStepSelected(int position);
     }
 
     @Nullable
@@ -56,11 +59,18 @@ public class StepsFragment extends Fragment {
         mRecipe = DetailActivity.mRecipe;
         mRecipeName.setText(mRecipe.getRecipeName());
         InstructionAdapter instructionAdapter = new InstructionAdapter(getContext(), mRecipe);
+
         // default GridLayout columns
-        int spanCount = 1;
-        if (DetailActivity.mTabletMode) { spanCount = 2; }
+        int spanCount = Integer.valueOf(getString(R.string.default_gridView_1));
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
         mRecyclerView.setAdapter(instructionAdapter);
+
+        mRecyclerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback.onStepSelected(mRecyclerView.getChildAdapterPosition(v) );
+            }
+        });
         return rootView;
     }
 

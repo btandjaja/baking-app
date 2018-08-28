@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:baselineAligned="false"
@@ -9,7 +10,7 @@
     <fragment
         android:id="@+id/recipe_steps_list"
         android:name="com.btandjaja.www.bakingrecipes.ui.StepsFragment"
-        android:layout_width="300dp"
+        android:layout_width="350dp"
         android:layout_height="match_parent"
         android:background="@android:color/holo_green_light"
         android:orientation="vertical"
@@ -23,19 +24,6 @@
 
     <!-- LinearLayout arrange video and description -->
 
-    <LinearLayout
-        android:id="@+id/tablet_linear_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+    <include layout="@layout/video_and_description" />
 
-        <include layout="@layout/activity_video" />
-
-        <!-- description -->
-        <TextView
-            android:id="@+id/tv_description_tablet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
 </LinearLayout>

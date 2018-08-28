@@ -4,6 +4,8 @@
         \nconnection and try again!</string>
     <string name="query_loader">1001</string>
     <string name="query">query</string>
+    <string name="default_gridView_1">1</string>
+    <string name="gridView_3">3</string>
 
     <!-- Detail Activity -->
     <string name="instruction">Instruction</string>
@@ -43,6 +45,7 @@
     <!-- instruction adapter -->
     <string name="video_available">Video Available</string>
     <string name="video_not_available">No Video Available</string>
+    <string name="gridView_2">2</string>
 
     <!-- video activity-->
     <string name="activity_title_video">VIDEO</string>

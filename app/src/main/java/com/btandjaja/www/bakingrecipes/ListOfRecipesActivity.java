@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.btandjaja.www.bakingrecipes.data.Recipe;
@@ -34,26 +35,31 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
     private URL mUrl;
     private RecipesAdapter mRecipeAdapter;
     private ArrayList<Recipe> mRecipesList;
+    public static boolean mTabletMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_recipes);
         ButterKnife.bind(this);
-        initializeValirable();
+        mTabletMode = findViewById(R.id.rl_tablet_mode) != null;
+        initializeValriable();
         createAdapter();
         setRecyclerView();
         loadRecipeData();
         getSupportLoaderManager().initLoader(queryLoader(), null, this);
     }
 
-    private void initializeValirable() {
+    private void initializeValriable() {
         mRecipesList = new ArrayList<>();
     }
     private void createAdapter() { mRecipeAdapter = new RecipesAdapter(this); }
 
     private void setRecyclerView() {
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
+        // Default gridView count
+        int spanCount = Integer.valueOf(getString(R.string.default_gridView_1));
+        if (mTabletMode) spanCount = Integer.valueOf(getString(R.string.gridView_3));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, spanCount));
         mRecyclerView.setAdapter(mRecipeAdapter);
     }
 
