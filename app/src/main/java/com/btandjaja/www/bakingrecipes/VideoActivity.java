@@ -2,7 +2,6 @@ package com.btandjaja.www.bakingrecipes;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -56,8 +55,7 @@ public class VideoActivity extends AppCompatActivity {
                 Util.getUserAgent(this, getResources().getString(R.string.application_name)),
                 (TransferListener<? super DataSource>) mBandwidthMeter);
 
-        //TODO window = new TimeLine.Window();
-//        initializePlayer(Uri.parse(mVideoUrl));
+        initializePlayer(Uri.parse(mVideoUrl));
     }
 
     private void checkSavedInstance(Bundle savedInstanceState) {
@@ -133,17 +131,11 @@ public class VideoActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (Build.VERSION.SDK_INT >= 23) {
-            initializePlayer(Uri.parse(mVideoUrl));
-        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (Build.VERSION.SDK_INT < 23 || mPlayer == null) {
-            initializePlayer(Uri.parse(mVideoUrl));
-        }
     }
 
     @Override

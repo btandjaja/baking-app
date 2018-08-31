@@ -28,10 +28,6 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.TransferListener;
 import com.google.android.exoplayer2.util.Util;
 
-import org.w3c.dom.Text;
-
-import butterknife.BindView;
-
 public class DetailActivity extends AppCompatActivity implements StepsFragment.OnStepClickListener,
         InstructionAdapter.InstructionAdapterOnClickHandler {
     public static final String KEY_PLAY_WHEN_READY = "play_when_ready";
@@ -95,7 +91,6 @@ public class DetailActivity extends AppCompatActivity implements StepsFragment.O
             if (TextUtils.isEmpty(videoUrl)) {
                 invalidVideoToast();
             } else {
-                // TODO release player if it's not null
                 if (mPlayer != null) releasePlayer();
                 startIntent(videoUrl, position);
             }
@@ -175,10 +170,12 @@ public class DetailActivity extends AppCompatActivity implements StepsFragment.O
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        updateStartPosition();
-        outState.putBoolean(DetailActivity.KEY_PLAY_WHEN_READY, mPlayWhenReady);
-        outState.putInt(DetailActivity.KEY_WINDOW, mCurrentWindow);
-        outState.putLong(DetailActivity.KEY_POSITION, mPlayBackPosition);
+        if (mPlayer != null) {
+            updateStartPosition();
+            outState.putBoolean(DetailActivity.KEY_PLAY_WHEN_READY, mPlayWhenReady);
+            outState.putInt(DetailActivity.KEY_WINDOW, mCurrentWindow);
+            outState.putLong(DetailActivity.KEY_POSITION, mPlayBackPosition);
+        }
         super.onSaveInstanceState(outState);
     }
 
@@ -202,6 +199,7 @@ public class DetailActivity extends AppCompatActivity implements StepsFragment.O
 
     private void releasePlayer() {
         if (mPlayer != null) {
+            updateStartPosition();
             mPlayer.stop();
             mPlayer.release();
             mPlayer = null;

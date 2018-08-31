@@ -12,21 +12,13 @@ import android.support.test.espresso.contrib.RecyclerViewActions;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.matcher.ComponentNameMatchers.hasShortClassName;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.toPackage;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.allOf;
 
 @RunWith(AndroidJUnit4.class)
 public class UITest {
     private static final String FIRST_RECIPE = "Nutella Pie";
-    private static final String PACKAGE_NAME = "com.btandjaja.www.bankingrecipes";
-    private static final String VIDEO_ACTIVITY = ".VideoActivity";
-    private static final String DETAIL_ACTIVITY = ".DetailActivity";
 
     @Rule
     public ActivityTestRule<ListOfRecipesActivity> mActivityTestRule = new ActivityTestRule<>(ListOfRecipesActivity.class);
@@ -54,14 +46,12 @@ public class UITest {
         // check shortDescription textbox exist
         onView(withId(R.id.rv_recipe_instruction_list)).check(matches(isDisplayed()));
 
-//        // if recyclerView exist, select the first viewHolder
-//        onView(withId(R.id.rv_recipe_instruction_list)).perform(RecyclerViewActions
-//        .actionOnItemAtPosition(position, click()));
-    }
+        // if recyclerView exist, select the first viewHolder
+        onView(withId(R.id.rv_recipe_instruction_list)).perform(RecyclerViewActions
+        .actionOnItemAtPosition(position, click()));
 
-//    @Test
-//    public void videoActivity_phone() {
-//
-//    }
+        // exoplayer exist
+        onView(withId(R.id.exoplayer_view)).check(matches(isDisplayed()));
+    }
 }
 

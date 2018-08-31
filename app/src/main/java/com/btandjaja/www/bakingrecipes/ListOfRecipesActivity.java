@@ -41,12 +41,14 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_recipes);
         ButterKnife.bind(this);
-        mTabletMode = findViewById(R.id.rl_tablet_mode) != null;
-        initializeValriable();
-        createAdapter();
-        setRecyclerView();
-        loadRecipeData();
-        getSupportLoaderManager().initLoader(queryLoader(), null, this);
+        if (savedInstanceState == null) {
+            mTabletMode = findViewById(R.id.rl_tablet_mode) != null;
+            initializeValriable();
+            createAdapter();
+            setRecyclerView();
+            loadRecipeData();
+            getSupportLoaderManager().initLoader(queryLoader(), null, this);
+        }
     }
 
     private void initializeValriable() {
@@ -83,6 +85,7 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(queryString(), mUrl.toString());
+        outState.putParcelableArrayList(Recipe.RECIPE, mRecipesList);
     }
 
     /*
@@ -96,7 +99,7 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
             protected void onStartLoading() {
                 super.onStartLoading();
                 if ( args == null ) return;
-                mIndicator.setVisibility(View.VISIBLE);
+                showIndicator();
                 forceLoad();
             }
 
@@ -110,12 +113,12 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
 
     @Override
     public void onLoadFinished(@NonNull Loader<String> loader, String jsonString) {
-        mIndicator.setVisibility(View.INVISIBLE);
+        hideIndicator();
         if (jsonString == null || TextUtils.isEmpty(jsonString)) {
             showError();
             return;
         }
-        RecipesUtils.getRecipesList(this, jsonString, mRecipesList);
+        if (mRecipesList.size() == 0) RecipesUtils.getRecipesList(this, jsonString, mRecipesList);
         setAdapter();
         showData();
     }
@@ -129,19 +132,29 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
 
     }
 
-    public void setAdapter() {
+    private void setAdapter() {
         mRecipeAdapter.setRecipeList(this, mRecipesList);
         mRecyclerView.setAdapter(mRecipeAdapter);
     }
 
-    public void showData() {
+    private void showData() {
         mError.setVisibility(View.INVISIBLE);
         mRecyclerView.setVisibility(View.VISIBLE);
     }
 
-    public void showError() {
+    private void showError() {
         mRecyclerView.setVisibility(View.INVISIBLE);
         mError.setVisibility(View.VISIBLE);
+    }
+
+    private void showIndicator() {
+        mIndicator.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.INVISIBLE);
+    }
+
+    private void hideIndicator() {
+        mRecyclerView.setVisibility(View.VISIBLE);
+        mIndicator.setVisibility(View.INVISIBLE);
     }
 
     private int queryLoader() { return Integer.parseInt(getString(R.string.query_loader)); }
