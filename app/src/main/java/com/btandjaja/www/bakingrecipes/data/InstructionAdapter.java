@@ -143,10 +143,5 @@ public class InstructionAdapter extends RecyclerView.Adapter<InstructionAdapter.
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
-
-//        @Override
-//        public void onClick(View v) {
-//            mHandler.OnClick(getAdapterPosition());
-//        }
     }
 }

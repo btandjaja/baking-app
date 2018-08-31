@@ -11,12 +11,11 @@
     <string name="instruction">Instruction</string>
     <string name="step">Step</string>
     <string name="invalid_recipe">Invalid Recipe!</string>
+    <string name="easy_steps">Let\'s get baking!</string>
+    <string name="number_of_servings">serving size\ </string>
 
     <!-- Network Utils -->
     <string name="app_name">Baking Recipes</string>
-    <!--<string name="scheme">http</string>-->
-    <!--<string name="authority">go.udacity.com</string>-->
-    <!--<string name="append_path">android-baking-app-json</string>-->
     <string name="scheme">https</string>
     <string name="authority">d17h27t6h515a5.cloudfront.net</string>
     <string name="append_path">topher/2017/May/59121517_baking/baking.json</string>

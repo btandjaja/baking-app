@@ -4,13 +4,14 @@
     android:id="@+id/tablet_linear_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/black"
     android:orientation="vertical">
 
     <include
         layout="@layout/activity_video"
-        android:layout_width="700dp"
+        android:layout_width="650dp"
         android:layout_height="400dp"
-        android:background="@android:color/black" />
+        android:padding="8dp" />
 
     <!-- divider -->
     <View
@@ -20,18 +21,22 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@android:color/white">
+
         <!-- short desription -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="8dp"
+            android:paddingTop="8dp">
 
             <TextView
                 android:id="@+id/tv_short_description_tablet"
-                tools:text="@string/step"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                tools:text="@string/step" />
 
             <!-- description -->
             <TextView

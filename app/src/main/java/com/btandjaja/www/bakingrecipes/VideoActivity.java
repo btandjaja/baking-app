@@ -1,8 +1,8 @@
 package com.btandjaja.www.bakingrecipes;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -28,10 +28,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class VideoActivity extends AppCompatActivity {
-    private final String KEY_PLAY_WHEN_READY = "play_when_ready";
-    private final String KEY_WINDOW = "window";
-    private final String KEY_POSITION = "position";
-
     private String mVideoUrl, mRecipeName;
     private int mStep;
     private SimpleExoPlayer mPlayer;
@@ -43,8 +39,7 @@ public class VideoActivity extends AppCompatActivity {
     private long mPlayBackPosition;
     private int mCurrentWindow;
 
-    @BindView(R.id.exoplayer_view)
-    PlayerView mPlayerView;
+    @BindView(R.id.exoplayer_view) PlayerView mPlayerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +55,9 @@ public class VideoActivity extends AppCompatActivity {
         mMediaDataSourceFactory = new DefaultDataSourceFactory(this,
                 Util.getUserAgent(this, getResources().getString(R.string.application_name)),
                 (TransferListener<? super DataSource>) mBandwidthMeter);
-        initializePlayer(Uri.parse(mVideoUrl));
+
+        //TODO window = new TimeLine.Window();
+//        initializePlayer(Uri.parse(mVideoUrl));
     }
 
     private void checkSavedInstance(Bundle savedInstanceState) {
@@ -69,9 +66,9 @@ public class VideoActivity extends AppCompatActivity {
             mCurrentWindow = 0;
             mPlayBackPosition = 0;
         } else {
-            mPlayWhenReady = savedInstanceState.getBoolean(KEY_PLAY_WHEN_READY);
-            mCurrentWindow = savedInstanceState.getInt(KEY_WINDOW);
-            mPlayBackPosition = savedInstanceState.getLong(KEY_POSITION);
+            mPlayWhenReady = savedInstanceState.getBoolean(DetailActivity.KEY_PLAY_WHEN_READY);
+            mCurrentWindow = savedInstanceState.getInt(DetailActivity.KEY_WINDOW);
+            mPlayBackPosition = savedInstanceState.getLong(DetailActivity.KEY_POSITION);
         }
     }
 
@@ -121,9 +118,9 @@ public class VideoActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         updateStartPosition();
-        outState.putBoolean(KEY_PLAY_WHEN_READY, mPlayWhenReady);
-        outState.putInt(KEY_WINDOW, mCurrentWindow);
-        outState.putLong(KEY_POSITION, mPlayBackPosition);
+        outState.putBoolean(DetailActivity.KEY_PLAY_WHEN_READY, mPlayWhenReady);
+        outState.putInt(DetailActivity.KEY_WINDOW, mCurrentWindow);
+        outState.putLong(DetailActivity.KEY_POSITION, mPlayBackPosition);
         super.onSaveInstanceState(outState);
     }
 
@@ -131,6 +128,22 @@ public class VideoActivity extends AppCompatActivity {
         mPlayBackPosition = mPlayer.getCurrentPosition();
         mCurrentWindow = mPlayer.getCurrentWindowIndex();
         mPlayWhenReady = mPlayer.getPlayWhenReady();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (Build.VERSION.SDK_INT >= 23) {
+            initializePlayer(Uri.parse(mVideoUrl));
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (Build.VERSION.SDK_INT < 23 || mPlayer == null) {
+            initializePlayer(Uri.parse(mVideoUrl));
+        }
     }
 
     @Override
