@@ -1,4 +1,5 @@
 Picture License
+launcher icon: http://itadakimasu-anime.tumblr.com/post/140272326398/a-basket-of-assorted-cookies-they-all-look-so
 Icon image from: http://animefood.tumblr.com/post/70619653871/tokyo-mew-mew
 Nutella Pie image from: https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwiz7OLf2_rcAhVKj1QKHTLOAmMQjRx6BAgBEAU&url=http%3A%2F%2Fthehillcountrycook.com%2F2011%2F09%2Fnutella-pie-aka-birthday-cake.html&psig=AOvVaw3jPyZHDdMvMQkAh0RFpsgh&ust=1534823086736269
 Brownies image from: https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwilmb-33PrcAhURAnwKHQZOAFEQjRx6BAgBEAU&url=https%3A%2F%2Fwww.justapinch.com%2Frecipes%2Fdessert%2Fdessert-chocolate%2Fbaileys-brownies.html&psig=AOvVaw1YgAYoPqXfNr-5RyovUqRV&ust=1534823263483090
