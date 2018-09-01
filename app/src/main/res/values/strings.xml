@@ -49,6 +49,7 @@
     <!-- video activity-->
     <string name="activity_title_video">VIDEO</string>
     <string name="application_name">media player</string>
+    <string name="video_removed">Video may have been removed!</string>
 
     <!-- Widget -->
     <string name="appwidget_text">BANANA</string>

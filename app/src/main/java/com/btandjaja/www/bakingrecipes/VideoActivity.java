@@ -75,7 +75,7 @@ public class VideoActivity extends AppCompatActivity {
         String stringUrl = getResources().getString(R.string.video_url);
         mVideoUrl = intent.hasExtra(stringUrl) ? intent.getExtras().getString(stringUrl) : null;
         if (mVideoUrl == null) {
-            Toast.makeText(this, "Video may have been removed!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getResources().getString(R.string.video_removed), Toast.LENGTH_LONG).show();
             finish();
         }
         // if it has video url, it has step number
