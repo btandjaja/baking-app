@@ -1,13 +1,10 @@
 package com.btandjaja.www.bakingrecipes;
 
+import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import android.support.test.espresso.contrib.RecyclerViewActions;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -16,8 +13,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
-@RunWith(AndroidJUnit4.class)
-public class UITestPhone {
+public class UITestTablet {
+
     private static final String FIRST_RECIPE = "Nutella Pie";
 
     @Rule
@@ -25,7 +22,7 @@ public class UITestPhone {
 
     @Test
     public void appStartHasRelativeLayout() {
-        onView(withId(R.id.rl_list_of_recipes)).check(matches(isDisplayed()));
+        onView(withId(R.id.rl_tablet_mode)).check(matches(isDisplayed()));
         onView(withId(R.id.rv_recipe_list)).check(matches(isDisplayed()));
     }
 
@@ -41,7 +38,7 @@ public class UITestPhone {
     @Test
     public void recyclerView_DetailActivity_FirstVideo_Phone() {
         int position = 0;
-          //from ListOfRecipesActivity recyclerView, select the first viewholder
+        //from ListOfRecipesActivity recyclerView, select the first viewholder
         onView(withId(R.id.rv_recipe_list)).perform(RecyclerViewActions
                 .actionOnItemAtPosition(position, click()));
         // check shortDescription textbox exist
@@ -49,10 +46,9 @@ public class UITestPhone {
 
         // if recyclerView exist, select the first viewHolder
         onView(withId(R.id.rv_recipe_instruction_list)).perform(RecyclerViewActions
-        .actionOnItemAtPosition(position, click()));
+                .actionOnItemAtPosition(position, click()));
 
         // exoplayer exist
         onView(withId(R.id.exoplayer_view)).check(matches(isDisplayed()));
     }
 }
-
