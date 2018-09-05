@@ -2,9 +2,11 @@ package com.btandjaja.www.bakingrecipes;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -12,13 +14,19 @@ import com.btandjaja.www.bakingrecipes.data.InstructionAdapter;
 import com.btandjaja.www.bakingrecipes.data.Recipe;
 import com.btandjaja.www.bakingrecipes.ui.StepsFragment;
 import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
@@ -79,15 +87,22 @@ public class DetailActivity extends AppCompatActivity implements StepsFragment.O
     public void OnClick(int position) {
         String videoUrl = mRecipe.getVideoUrlList().get(position);
         if (ListOfRecipesActivity.mTabletMode) {
+            // tablet
             mPlayerView = findViewById(R.id.exoplayer_view);
             fillInDescription(position);
+
             if (TextUtils.isEmpty(videoUrl)) {
-                if (mPlayer != null) mPlayer.stop();
+                if (mPlayer != null) {
+                    mPlayerView.setVisibility(View.INVISIBLE);
+                    releasePlayer();
+                }
                 invalidVideoToast();
             } else {
+                mPlayerView.setVisibility(View.VISIBLE);
                 displayVideo(position);
             }
         } else {
+            // phone
             if (TextUtils.isEmpty(videoUrl)) {
                 invalidVideoToast();
             } else {
@@ -175,6 +190,10 @@ public class DetailActivity extends AppCompatActivity implements StepsFragment.O
             outState.putBoolean(DetailActivity.KEY_PLAY_WHEN_READY, mPlayWhenReady);
             outState.putInt(DetailActivity.KEY_WINDOW, mCurrentWindow);
             outState.putLong(DetailActivity.KEY_POSITION, mPlayBackPosition);
+        } else {
+            mPlayWhenReady = true;
+            mCurrentWindow = 0;
+            mPlayBackPosition = 0;
         }
         super.onSaveInstanceState(outState);
     }
@@ -183,12 +202,6 @@ public class DetailActivity extends AppCompatActivity implements StepsFragment.O
         mPlayBackPosition = mPlayer.getCurrentPosition();
         mCurrentWindow = mPlayer.getCurrentWindowIndex();
         mPlayWhenReady = mPlayer.getPlayWhenReady();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mPlayer != null) releasePlayer();
     }
 
     @Override
