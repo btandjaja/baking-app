@@ -1,6 +1,9 @@
 package com.btandjaja.www.bakingrecipes;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
@@ -19,6 +22,7 @@ import com.btandjaja.www.bakingrecipes.data.Recipe;
 import com.btandjaja.www.bakingrecipes.data.RecipesAdapter;
 import com.btandjaja.www.bakingrecipes.utilities.NetworkUtils;
 import com.btandjaja.www.bakingrecipes.utilities.RecipesUtils;
+import com.btandjaja.www.bakingrecipes.data.BakingContract.BakingEntry;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -124,6 +128,8 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
             return;
         }
         if (mRecipesList.size() == 0) RecipesUtils.getRecipesList(this, jsonString, mRecipesList);
+        // Add recipe to database if it's not already on database
+        addRecipe();
         setAdapter();
         showData();
     }
@@ -135,6 +141,29 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
     @Override
     public void onLoaderReset(@NonNull Loader<String> loader) {
 
+    }
+
+    /**
+     * Add recipe to database if it's not in database
+     */
+    private void addRecipe() {
+        for (int i = 0; i < mRecipesList.size(); i++) {
+            Recipe recipe = mRecipesList.get(i);
+            String selection = BakingEntry.COLUMN_RECIPE_NAME + "=?";
+            String[] selectionArgs = new String[]{recipe.getRecipeName()};
+            Cursor cursor = getContentResolver().query(BakingEntry.CONTENT_URI,
+                    null,
+                    selection,
+                    selectionArgs,
+                    null);
+            if (cursor == null) {
+                ContentValues cv = new ContentValues();
+                cv.put(BakingEntry.COLUMN_RECIPE_NAME, recipe.getRecipeName());
+                Uri uri = BakingEntry.CONTENT_URI;
+                uri = uri.buildUpon().appendPath(recipe.getRecipeName()).build();
+                getContentResolver().insert(uri, cv);
+            }
+        }
     }
 
     private void setAdapter() {

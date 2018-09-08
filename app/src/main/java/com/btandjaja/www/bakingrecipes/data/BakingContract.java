@@ -15,6 +15,5 @@ public class BakingContract {
 
         public static final String TABLE_NAME = "recipe_list";
         public static final String COLUMN_RECIPE_NAME = "recipe_name";
-        public static final String COLUMN_DRAWABLE_RESOURCE = "drawable_resource";
     }
 }

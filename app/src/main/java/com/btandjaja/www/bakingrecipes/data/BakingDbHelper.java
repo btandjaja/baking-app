@@ -15,8 +15,7 @@ public class BakingDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         final String CREATE_TABLE = "CREATE TABLE " + BakingContract.BakingEntry.TABLE_NAME + " (" +
                 BakingContract.BakingEntry._ID + " INTEGER PRIMARY KEY, " +
-                BakingContract.BakingEntry.COLUMN_RECIPE_NAME + " TEXT NOT NULL, " +
-                BakingContract.BakingEntry.COLUMN_DRAWABLE_RESOURCE + " INTEGER NOT NULL);";
+                BakingContract.BakingEntry.COLUMN_RECIPE_NAME + " TEXT NOT NULL);";
         db.execSQL(CREATE_TABLE);
     }
 
