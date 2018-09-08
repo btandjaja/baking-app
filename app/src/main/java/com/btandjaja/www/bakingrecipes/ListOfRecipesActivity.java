@@ -40,14 +40,19 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_recipes);
-        ButterKnife.bind(this);
-        if (savedInstanceState == null) {
-            mTabletMode = findViewById(R.id.rl_tablet_mode) != null;
-            initializeValriable();
-            createAdapter();
-            setRecyclerView();
-            loadRecipeData();
-            getSupportLoaderManager().initLoader(queryLoader(), null, this);
+        Intent intentParent = getParentActivityIntent();
+        if (intentParent == null) {
+            ButterKnife.bind(this);
+            if (savedInstanceState == null) {
+                mTabletMode = findViewById(R.id.rl_tablet_mode) != null;
+                initializeValriable();
+                createAdapter();
+                setRecyclerView();
+                loadRecipeData();
+                getSupportLoaderManager().initLoader(queryLoader(), null, this);
+            }
+        } else {
+
         }
     }
 
