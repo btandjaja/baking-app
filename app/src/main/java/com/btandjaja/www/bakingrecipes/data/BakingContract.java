@@ -5,7 +5,7 @@ import android.provider.BaseColumns;
 
 
 public class BakingContract {
-    public static final String AUTHORITY = "com.btandjaja.www.baking_recipe";
+    public static final String AUTHORITY = "com.btandjaja.www.bakingrecipes";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
     public static final String PATH_LIST = "list";
 
