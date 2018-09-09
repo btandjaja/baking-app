@@ -18,6 +18,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.btandjaja.www.bakingrecipes.data.Recipe;
 import com.btandjaja.www.bakingrecipes.data.RecipesAdapter;
@@ -150,22 +151,53 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
     private void addRecipeToDb() {
         for (int i = 0; i < mRecipesList.size(); i++) {
             Recipe recipe = mRecipesList.get(i);
-            String selection = BakingEntry.COLUMN_RECIPE_NAME + "=?";
-            String[] selectionArgs = new String[]{recipe.getRecipeName()};
+            String selection = BakingEntry.COLUMN_ARRAYLIST_INDEX + "=?";
+            String[] selectionArgs = new String[]{String.valueOf(i)};
 
             Cursor cursor = getContentResolver().query(BakingEntry.CONTENT_URI,
                     null,
                     selection,
                     selectionArgs,
                     null);
+            // item to be add/update to db
+            ContentValues cv = createContentValue(recipe.getRecipeName(), i);
+            // Uri of contentResolver
+            Uri uri = BakingEntry.CONTENT_URI.buildUpon().appendPath(String.valueOf(i)).build();
             if (cursor == null) {
-                ContentValues cv = new ContentValues();
-                cv.put(BakingEntry.COLUMN_RECIPE_NAME, recipe.getRecipeName());
-                Uri uri = BakingEntry.CONTENT_URI;
-                uri = uri.buildUpon().appendPath(recipe.getRecipeName()).build();
                 getContentResolver().insert(uri, cv);
+            } else {
+                getContentResolver().update(uri, cv, selection, selectionArgs);
             }
         }
+
+        //TODO check table, remove
+        checkDB();
+    }
+
+    //TODO remove
+    private void checkDB() {
+        Cursor cursor = getContentResolver().query(BakingEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                BakingEntry.COLUMN_ARRAYLIST_INDEX);
+//        cursor.moveToFirst();
+        int count = cursor.getCount();
+        while(cursor.moveToNext()) {
+            int columnName = cursor.getColumnIndex(BakingEntry.COLUMN_RECIPE_NAME);
+            String recipeName = cursor.getColumnName(columnName);
+            int columnIndex = cursor.getColumnIndex(BakingEntry.COLUMN_ARRAYLIST_INDEX);
+            String arrListIndex = cursor.getColumnName(columnIndex);
+            Toast.makeText(this, recipeName + " " + arrListIndex, Toast.LENGTH_LONG).show();
+        }
+        cursor.close();
+    }
+
+    private ContentValues createContentValue(String recipeName, int index) {
+        ContentValues cv = new ContentValues();
+        cv.put(BakingEntry.COLUMN_RECIPE_NAME, recipeName);
+        cv.put(BakingEntry.COLUMN_ARRAYLIST_INDEX, index);
+        return cv;
     }
 
     private void setAdapter() {

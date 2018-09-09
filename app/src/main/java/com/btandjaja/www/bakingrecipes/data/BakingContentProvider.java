@@ -13,7 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import static com.btandjaja.www.bakingrecipes.data.BakingContract.AUTHORITY;
-import static com.btandjaja.www.bakingrecipes.data.BakingContract.BakingEntry.COLUMN_RECIPE_NAME;
+import static com.btandjaja.www.bakingrecipes.data.BakingContract.BakingEntry.COLUMN_ARRAYLIST_INDEX;
 import static com.btandjaja.www.bakingrecipes.data.BakingContract.BakingEntry.TABLE_NAME;
 import static com.btandjaja.www.bakingrecipes.data.BakingContract.PATH_LIST;
 
@@ -28,7 +28,7 @@ public class BakingContentProvider extends ContentProvider {
         /* directory */
         uriMatcher.addURI(AUTHORITY, PATH_LIST, RECIPES);
         /* single item */
-        uriMatcher.addURI(AUTHORITY, PATH_LIST + "/*", RECIPE_WITH_ID);
+        uriMatcher.addURI(AUTHORITY, PATH_LIST + "/#", RECIPE_WITH_ID);
         return uriMatcher;
     }
 
@@ -47,22 +47,22 @@ public class BakingContentProvider extends ContentProvider {
         Cursor returnCursor;
         switch(match) {
             case RECIPE_WITH_ID:
-                returnCursor = db.query(TABLE_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder);
-                break;
-            case RECIPES:
                 String id = uri.getLastPathSegment();
-                String mSelection = COLUMN_RECIPE_NAME + "=?";
+                String mSelection = COLUMN_ARRAYLIST_INDEX + "=?";
                 String [] mSelectionArgs = new String [] {id};
                 returnCursor = db.query(TABLE_NAME,
                         projection,
                         mSelection,
                         mSelectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            case RECIPES:
+                returnCursor = db.query(TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
                         null,
                         null,
                         sortOrder);
@@ -120,6 +120,25 @@ public class BakingContentProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        final SQLiteDatabase db = mBakingDbHelper.getWritableDatabase();
+        int match = sUriMatcher.match(uri);
+
+        int recipeUpdate;
+        switch(match) {
+            case RECIPE_WITH_ID:
+                recipeUpdate = db.update(TABLE_NAME, values, selection, selectionArgs);
+                break;
+            // Default exception
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+
+        // Notify the resolver of a change and return the number of items updated
+        if(recipeUpdate!=0) {
+            // A place (or more) was updated, set notification
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        return recipeUpdate;
     }
 }

@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.btandjaja.www.bakingrecipes.data.BakingContract.BakingEntry;
 public class BakingDbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "recipe_list.db";
-    private static final int VERSION = 1;
+    private static final int VERSION = 6;
 
     public BakingDbHelper(Context context) { super(context, DATABASE_NAME, null, VERSION);  }
 
@@ -15,8 +15,9 @@ public class BakingDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         final String CREATE_TABLE = "CREATE TABLE " + BakingEntry.TABLE_NAME + " (" +
-                BakingEntry._ID + " INTEGER PRIMARY KEY, " +
-                BakingEntry.COLUMN_RECIPE_NAME + " TEXT NOT NULL);";
+                BakingEntry._ID                     + " INTEGER PRIMARY KEY, " +
+                BakingEntry.COLUMN_RECIPE_NAME      + " TEXT NOT NULL, " +
+                BakingEntry.COLUMN_ARRAYLIST_INDEX  + " INTEGER NOT NULL);";
         db.execSQL(CREATE_TABLE);
     }
 
