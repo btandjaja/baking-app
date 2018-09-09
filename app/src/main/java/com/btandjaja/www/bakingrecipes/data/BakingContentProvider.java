@@ -19,7 +19,7 @@ import static com.btandjaja.www.bakingrecipes.data.BakingContract.PATH_LIST;
 
 public class BakingContentProvider extends ContentProvider {
     public static final int RECIPES = 100;
-    public static final int RECIPE_WITH_NAME = 101;
+    public static final int RECIPE_WITH_ID = 101;
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private BakingDbHelper mBakingDbHelper;
 
@@ -28,7 +28,7 @@ public class BakingContentProvider extends ContentProvider {
         /* directory */
         uriMatcher.addURI(AUTHORITY, PATH_LIST, RECIPES);
         /* single item */
-        uriMatcher.addURI(AUTHORITY, PATH_LIST + "/#", RECIPE_WITH_NAME);
+        uriMatcher.addURI(AUTHORITY, PATH_LIST + "/*", RECIPE_WITH_ID);
         return uriMatcher;
     }
 
@@ -46,7 +46,7 @@ public class BakingContentProvider extends ContentProvider {
         int match = sUriMatcher.match(uri);
         Cursor returnCursor;
         switch(match) {
-            case RECIPE_WITH_NAME:
+            case RECIPE_WITH_ID:
                 returnCursor = db.query(TABLE_NAME,
                         projection,
                         selection,
@@ -85,7 +85,7 @@ public class BakingContentProvider extends ContentProvider {
         int match = sUriMatcher.match(uri);
         Uri returnUri;
         switch(match) {
-            case RECIPE_WITH_NAME:
+            case RECIPE_WITH_ID:
                 long id = db.insert(TABLE_NAME, null, values);
                 if (id > 0) {
                     returnUri = ContentUris.withAppendedId(uri, id);
@@ -106,7 +106,7 @@ public class BakingContentProvider extends ContentProvider {
         int match = sUriMatcher.match(uri);
         int rowDeleted;
         switch(match) {
-            case RECIPE_WITH_NAME:
+            case RECIPE_WITH_ID:
                 rowDeleted = db.delete(TABLE_NAME, selection, selectionArgs);
                 break;
             default:

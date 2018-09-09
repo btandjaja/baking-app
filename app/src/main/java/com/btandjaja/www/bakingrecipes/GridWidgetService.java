@@ -16,6 +16,7 @@ public class GridWidgetService extends RemoteViewsService {
 
 class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     Context mContext;
+    Cursor mCursor;
 
     public GridRemoteViewsFactory(Context applicationContext) { mContext = applicationContext; }
 
@@ -31,7 +32,7 @@ class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public void onDestroy() {
-
+        mCursor.close();
     }
 
     @Override

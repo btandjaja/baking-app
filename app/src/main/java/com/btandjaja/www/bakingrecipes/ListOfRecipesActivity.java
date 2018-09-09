@@ -1,5 +1,6 @@
 package com.btandjaja.www.bakingrecipes;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -129,7 +130,7 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
         }
         if (mRecipesList.size() == 0) RecipesUtils.getRecipesList(this, jsonString, mRecipesList);
         // Add recipe to database if it's not already on database
-        addRecipe();
+        addRecipeToDb();
         setAdapter();
         showData();
     }
@@ -146,11 +147,12 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
     /**
      * Add recipe to database if it's not in database
      */
-    private void addRecipe() {
+    private void addRecipeToDb() {
         for (int i = 0; i < mRecipesList.size(); i++) {
             Recipe recipe = mRecipesList.get(i);
             String selection = BakingEntry.COLUMN_RECIPE_NAME + "=?";
             String[] selectionArgs = new String[]{recipe.getRecipeName()};
+
             Cursor cursor = getContentResolver().query(BakingEntry.CONTENT_URI,
                     null,
                     selection,
