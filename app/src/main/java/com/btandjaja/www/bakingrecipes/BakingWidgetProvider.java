@@ -35,6 +35,11 @@ public class BakingWidgetProvider extends AppWidgetProvider {
     }
 
     @Override
+    public void onDeleted(Context context, int[] appWidgetIds) {
+        super.onDeleted(context, appWidgetIds);
+    }
+
+    @Override
     public void onEnabled(Context context) {
         // Enter relevant functionality for when the first widget is created
     }

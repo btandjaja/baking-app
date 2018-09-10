@@ -46,6 +46,15 @@ public class BakingContentProvider extends ContentProvider {
         int match = sUriMatcher.match(uri);
         Cursor returnCursor;
         switch(match) {
+            case RECIPES:
+                returnCursor = db.query(TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
             case RECIPE_WITH_ID:
                 String id = uri.getLastPathSegment();
                 String mSelection = COLUMN_ARRAYLIST_INDEX + "=?";
@@ -54,15 +63,6 @@ public class BakingContentProvider extends ContentProvider {
                         projection,
                         mSelection,
                         mSelectionArgs,
-                        null,
-                        null,
-                        sortOrder);
-                break;
-            case RECIPES:
-                returnCursor = db.query(TABLE_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
                         null,
                         null,
                         sortOrder);

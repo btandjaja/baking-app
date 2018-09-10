@@ -180,8 +180,7 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
                 null,
                 null,
                 null,
-                BakingEntry.COLUMN_ARRAYLIST_INDEX);
-//        cursor.moveToFirst();
+                null);
         int count = cursor.getCount();
         while(cursor.moveToNext()) {
             int columnName = cursor.getColumnIndex(BakingEntry.COLUMN_RECIPE_NAME);

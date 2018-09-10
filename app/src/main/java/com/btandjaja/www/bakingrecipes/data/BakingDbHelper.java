@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.btandjaja.www.bakingrecipes.data.BakingContract.BakingEntry;
 public class BakingDbHelper extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "recipe_list.db";
+    private static final String DATABASE_NAME = "recipelist.db";
     private static final int VERSION = 6;
 
     public BakingDbHelper(Context context) { super(context, DATABASE_NAME, null, VERSION);  }
