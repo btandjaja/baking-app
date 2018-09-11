@@ -20,13 +20,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.btandjaja.www.bakingrecipes.data.BakingContract;
 import com.btandjaja.www.bakingrecipes.data.Recipe;
 import com.btandjaja.www.bakingrecipes.data.RecipeContract;
 import com.btandjaja.www.bakingrecipes.data.RecipesAdapter;
 import com.btandjaja.www.bakingrecipes.utilities.NetworkUtils;
 import com.btandjaja.www.bakingrecipes.utilities.RecipesUtils;
-import com.btandjaja.www.bakingrecipes.data.BakingContract.BakingEntry;
 import com.btandjaja.www.bakingrecipes.data.RecipeContract.RecipeEntry;
 
 import java.net.URL;

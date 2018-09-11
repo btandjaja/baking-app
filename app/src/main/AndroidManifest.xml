@@ -37,10 +37,6 @@
 
         <provider
             android:authorities="com.btandjaja.www.bakingrecipes"
-            android:name=".data.BakingContentProvider"
-            android:exported="false" />
-        <provider
-            android:authorities="com.btandjaja.www.bakingrecipes"
             android:name=".data.RecipeContentProvider"
             android:exported="false" />
     </application>
