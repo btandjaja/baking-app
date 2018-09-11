@@ -45,7 +45,7 @@ public class RecipeContentProvider extends ContentProvider {
           The two calls below add matches for the task directory and a single item by ID.
          */
         uriMatcher.addURI(RecipeContract.AUTHORITY, RecipeContract.PATH_RECIPE_LIST, RECIPE_LIST);
-        uriMatcher.addURI(RecipeContract.AUTHORITY, RecipeContract.PATH_RECIPE_LIST + "/#", RECIPE_LIST_WITH_ID);
+        uriMatcher.addURI(RecipeContract.AUTHORITY, RecipeContract.PATH_RECIPE_LIST + "/*", RECIPE_LIST_WITH_ID);
 
         return uriMatcher;
     }
@@ -68,14 +68,13 @@ public class RecipeContentProvider extends ContentProvider {
         Cursor returnCursor;
         switch (match) {
             case RECIPE_LIST:
-                //TODO return table
                 returnCursor = db.query(RecipeEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
                         null,
                         null,
-                        null,
-                        null,
-                        null,
-                        null);
+                        sortOrder);
                 break;
             case RECIPE_LIST_WITH_ID:
                 String id = uri.getLastPathSegment();
