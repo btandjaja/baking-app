@@ -1,5 +1,6 @@
 package com.btandjaja.www.bakingrecipes;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -21,10 +22,12 @@ import android.widget.Toast;
 
 import com.btandjaja.www.bakingrecipes.data.BakingContract;
 import com.btandjaja.www.bakingrecipes.data.Recipe;
+import com.btandjaja.www.bakingrecipes.data.RecipeContract;
 import com.btandjaja.www.bakingrecipes.data.RecipesAdapter;
 import com.btandjaja.www.bakingrecipes.utilities.NetworkUtils;
 import com.btandjaja.www.bakingrecipes.utilities.RecipesUtils;
 import com.btandjaja.www.bakingrecipes.data.BakingContract.BakingEntry;
+import com.btandjaja.www.bakingrecipes.data.RecipeContract.RecipeEntry;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -151,22 +154,29 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
     private void addRecipeToDb() {
         for (int i = 0; i < mRecipesList.size(); i++) {
             Recipe recipe = mRecipesList.get(i);
-            String selection = BakingEntry.COLUMN_ARRAYLIST_INDEX + "=?";
-            String[] selectionArgs = new String[]{String.valueOf(i)};
+            String selection = RecipeEntry.COLUMN_RECIPE_NAME + "=?";
+            String[] selectionArgs = new String[]{recipe.getRecipeName()};
 
-            Cursor cursor = getContentResolver().query(BakingEntry.CONTENT_URI,
+            Cursor cursor = getContentResolver().query(RecipeEntry.CONTENT_URI,
                     null,
                     selection,
                     selectionArgs,
                     null);
             // item to be add/update to db
             ContentValues cv = createContentValue(recipe.getRecipeName(), i);
-            // Uri of contentResolver
-            Uri uri = BakingEntry.CONTENT_URI.buildUpon().appendPath(String.valueOf(i)).build();
+
             if (cursor == null) {
+                Uri uri = RecipeEntry.CONTENT_URI.buildUpon().appendPath(String.valueOf(i)).build();
                 getContentResolver().insert(uri, cv);
             } else {
-                getContentResolver().update(uri, cv, selection, selectionArgs);
+                Uri SINGLE_URI = ContentUris.withAppendedId(
+                        RecipeContract.BASE_CONTENT_URI.buildUpon().appendPath(RecipeContract.PATH_RECIPE_LIST)
+                                .build(), i);
+                getContentResolver().update(
+                        SINGLE_URI,
+                        cv,
+                        selection,
+                        selectionArgs);
             }
         }
 
@@ -176,27 +186,41 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
 
     //TODO remove
     private void checkDB() {
-        Cursor cursor = getContentResolver().query(BakingContract.BakingEntry.CONTENT_URI,
-                null,
-                null,
-                null,
-                null);
-        cursor.moveToFirst();
-        int count = cursor.getCount();
-        while(cursor.moveToNext()) {
-            int columnName = cursor.getColumnIndex(BakingEntry.COLUMN_RECIPE_NAME);
-            String recipeName = cursor.getColumnName(columnName);
-            int columnIndex = cursor.getColumnIndex(BakingEntry.COLUMN_ARRAYLIST_INDEX);
-            String arrListIndex = cursor.getColumnName(columnIndex);
-            Toast.makeText(this, recipeName + " " + arrListIndex, Toast.LENGTH_LONG).show();
+//        Cursor cursor = getContentResolver().query(BakingContract.BakingEntry.CONTENT_URI,
+//                null,
+//                null,
+//                null,
+//                null);
+//        cursor.moveToFirst();
+//        int count = cursor.getCount();
+        for (int i = 0; i < 4; i++) {
+            String selection = RecipeEntry.COLUMN_ARRAYLIST_INDEX + "=?";
+            String[] selectionArgs = new String[] {String.valueOf(i)};
+            Cursor mCursor = getContentResolver().query(RecipeEntry.CONTENT_URI,
+                    null,
+                    selection,
+                    selectionArgs,
+                    null);
+            boolean test = mCursor.getCount() > 0;
+
+            String recipeName = mCursor.getColumnName(mCursor.getColumnIndex(RecipeEntry.COLUMN_RECIPE_NAME));
+            String listIndex = mCursor.getColumnName(mCursor.getColumnIndex(RecipeEntry.COLUMN_ARRAYLIST_INDEX));
+            Toast.makeText(this, recipeName + " " + listIndex, Toast.LENGTH_LONG).show();
         }
-        cursor.close();
+//        while(cursor.moveToNext()) {
+//            int columnName = cursor.getColumnIndex(BakingEntry.COLUMN_RECIPE_NAME);
+//            String recipeName = cursor.getColumnName(columnName);
+//            int columnIndex = cursor.getColumnIndex(BakingEntry.COLUMN_ARRAYLIST_INDEX);
+//            String arrListIndex = cursor.getColumnName(columnIndex);
+//            Toast.makeText(this, recipeName + " " + arrListIndex, Toast.LENGTH_LONG).show();
+//        }
+//        cursor.close();
     }
 
     private ContentValues createContentValue(String recipeName, int index) {
         ContentValues cv = new ContentValues();
-        cv.put(BakingEntry.COLUMN_RECIPE_NAME, recipeName);
-        cv.put(BakingEntry.COLUMN_ARRAYLIST_INDEX, index);
+        cv.put(RecipeEntry.COLUMN_RECIPE_NAME, recipeName);
+        cv.put(RecipeEntry.COLUMN_ARRAYLIST_INDEX, index);
         return cv;
     }
 
