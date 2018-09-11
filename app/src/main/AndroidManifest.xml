@@ -35,10 +35,6 @@
                 android:resource="@xml/baking_widget_provider_info" />
         </receiver>
 
-        <provider
-            android:authorities="com.btandjaja.www.bakingrecipes"
-            android:name=".data.RecipeContentProvider"
-            android:exported="false" />
     </application>
 
 </manifest>
