@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.btandjaja.www.bakingrecipes.data.Recipe;
+import com.btandjaja.www.bakingrecipes.data.RecipeEntry;
 import com.btandjaja.www.bakingrecipes.data.RecipesAdapter;
 import com.btandjaja.www.bakingrecipes.utilities.NetworkUtils;
 import com.btandjaja.www.bakingrecipes.utilities.RecipesUtils;
@@ -149,28 +150,7 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
     private void addRecipeToDb() {
         for (int i = 0; i < mRecipesList.size(); i++) {
             Recipe recipe = mRecipesList.get(i);
-            RecipeEntry recipeEntry = new RecipeEntry(recipe.getRecipeName(), i);
-            String selection = RecipeEntry.COLUMN_RECIPE_NAME + "=?";
-            String[] selectionArgs = new String[]{recipe.getRecipeName()};
 
-            Cursor cursor = getContentResolver().query(RecipeEntry.CONTENT_URI,
-                    null,
-                    selection,
-                    selectionArgs,
-                    null);
-            // item to be add/update to db
-            ContentValues cv = createContentValue(recipe.getRecipeName(), i);
-            int count = cursor.getCount();
-            if (cursor == null || cursor.getCount() == 0) {
-                getContentResolver().insert(RecipeEntry.CONTENT_URI, cv);
-            } else {
-                Uri SINGLE_URI = RecipeEntry.CONTENT_URI.buildUpon().appendPath(recipe.getRecipeName()).build();
-                getContentResolver().update(
-                        SINGLE_URI,
-                        cv,
-                        selection,
-                        selectionArgs);
-            }
         }
 
         //TODO check table, remove
@@ -182,10 +162,8 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
     }
 
     private ContentValues createContentValue(String recipeName, int index) {
-        ContentValues cv = new ContentValues();
-        cv.put(RecipeEntry.COLUMN_RECIPE_NAME, recipeName);
-        cv.put(RecipeEntry.COLUMN_ARRAYLIST_INDEX, index);
-        return cv;
+
+        return null;
     }
 
     private void setAdapter() {
