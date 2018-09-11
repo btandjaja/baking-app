@@ -1,6 +1,5 @@
 package com.btandjaja.www.bakingrecipes;
 
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -20,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.btandjaja.www.bakingrecipes.data.BakingContract;
 import com.btandjaja.www.bakingrecipes.data.Recipe;
 import com.btandjaja.www.bakingrecipes.data.RecipesAdapter;
 import com.btandjaja.www.bakingrecipes.utilities.NetworkUtils;
@@ -176,11 +176,12 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
 
     //TODO remove
     private void checkDB() {
-        Cursor cursor = getContentResolver().query(BakingEntry.CONTENT_URI,
+        Cursor cursor = getContentResolver().query(BakingContract.BakingEntry.CONTENT_URI,
                 null,
                 null,
                 null,
                 null);
+        cursor.moveToFirst();
         int count = cursor.getCount();
         while(cursor.moveToNext()) {
             int columnName = cursor.getColumnIndex(BakingEntry.COLUMN_RECIPE_NAME);

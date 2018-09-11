@@ -15,7 +15,7 @@ import android.support.annotation.Nullable;
 import static com.btandjaja.www.bakingrecipes.data.BakingContract.AUTHORITY;
 import static com.btandjaja.www.bakingrecipes.data.BakingContract.BakingEntry.COLUMN_ARRAYLIST_INDEX;
 import static com.btandjaja.www.bakingrecipes.data.BakingContract.BakingEntry.TABLE_NAME;
-import static com.btandjaja.www.bakingrecipes.data.BakingContract.PATH_LIST;
+import static com.btandjaja.www.bakingrecipes.data.BakingContract.PATH_RECIPE;
 
 public class BakingContentProvider extends ContentProvider {
     public static final int RECIPES = 100;
@@ -26,9 +26,9 @@ public class BakingContentProvider extends ContentProvider {
     public static UriMatcher buildUriMatcher() {
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         /* directory */
-        uriMatcher.addURI(AUTHORITY, PATH_LIST, RECIPES);
+        uriMatcher.addURI(AUTHORITY, PATH_RECIPE, RECIPES);
         /* single item */
-        uriMatcher.addURI(AUTHORITY, PATH_LIST + "/#", RECIPE_WITH_ID);
+        uriMatcher.addURI(AUTHORITY, PATH_RECIPE + "/#", RECIPE_WITH_ID);
         return uriMatcher;
     }
 
