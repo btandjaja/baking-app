@@ -2,8 +2,6 @@ package com.btandjaja.www.bakingrecipes;
 
 import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
@@ -17,9 +15,9 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.btandjaja.www.bakingrecipes.data.Recipe;
+import com.btandjaja.www.bakingrecipes.data.RecipeDatabase;
 import com.btandjaja.www.bakingrecipes.data.RecipeEntry;
 import com.btandjaja.www.bakingrecipes.data.RecipesAdapter;
 import com.btandjaja.www.bakingrecipes.utilities.NetworkUtils;
@@ -31,40 +29,46 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ListOfRecipesActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String>,RecipesAdapter.RecipeAdapterOnClickHandler {
-    @BindView(R.id.tv_error_main_activity) TextView mError;
-    @BindView(R.id.pb_view) ProgressBar mIndicator;
-    @BindView(R.id.rv_recipe_list) RecyclerView mRecyclerView;
+public class ListOfRecipesActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String>, RecipesAdapter.RecipeAdapterOnClickHandler {
+    @BindView(R.id.tv_error_main_activity)
+    TextView mError;
+    @BindView(R.id.pb_view)
+    ProgressBar mIndicator;
+    @BindView(R.id.rv_recipe_list)
+    RecyclerView mRecyclerView;
 
     private URL mUrl;
     private RecipesAdapter mRecipeAdapter;
     private ArrayList<Recipe> mRecipesList;
     public static boolean mTabletMode;
 
+    // database variable
+    private RecipeDatabase mDb;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_recipes);
-        Intent intentParent = getParentActivityIntent();
-        if (intentParent == null) {
-            ButterKnife.bind(this);
-            if (savedInstanceState == null) {
-                mTabletMode = findViewById(R.id.rl_tablet_mode) != null;
-                initializeValriable();
-                createAdapter();
-                setRecyclerView();
-                loadRecipeData();
-                getSupportLoaderManager().initLoader(queryLoader(), null, this);
-            }
-        } else {
-
+        ButterKnife.bind(this);
+        // get database
+        mDb = RecipeDatabase.getsInstance(getApplicationContext());
+        if (savedInstanceState == null) {
+            mTabletMode = findViewById(R.id.rl_tablet_mode) != null;
+            initializeValriable();
+            createAdapter();
+            setRecyclerView();
+            loadRecipeData();
+            getSupportLoaderManager().initLoader(queryLoader(), null, this);
         }
     }
 
     private void initializeValriable() {
         mRecipesList = new ArrayList<>();
     }
-    private void createAdapter() { mRecipeAdapter = new RecipesAdapter(this); }
+
+    private void createAdapter() {
+        mRecipeAdapter = new RecipesAdapter(this);
+    }
 
     private void setRecyclerView() {
         // Default gridView count
@@ -84,7 +88,7 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
         Bundle bundle = new Bundle();
         bundle.putString(queryString(), mUrl.toString());
         LoaderManager loaderManager = getSupportLoaderManager();
-        if(loaderManager.getLoader(queryLoader()) == null) {
+        if (loaderManager.getLoader(queryLoader()) == null) {
             loaderManager.initLoader(queryLoader(), bundle, this);
         } else {
             loaderManager.restartLoader(queryLoader(), bundle, this);
@@ -108,7 +112,7 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
             @Override
             protected void onStartLoading() {
                 super.onStartLoading();
-                if ( args == null ) return;
+                if (args == null) return;
                 showIndicator();
                 forceLoad();
             }
@@ -116,7 +120,7 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
             @Nullable
             @Override
             public String loadInBackground() {
-                return RecipesUtils.getRecipesListJsonString( args.getString(queryString()) );
+                return RecipesUtils.getRecipesListJsonString(args.getString(queryString()));
             }
         };
     }
@@ -137,6 +141,7 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
 
     /**
      * Needed, but not used.
+     *
      * @param loader
      */
     @Override
@@ -150,7 +155,8 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
     private void addRecipeToDb() {
         for (int i = 0; i < mRecipesList.size(); i++) {
             Recipe recipe = mRecipesList.get(i);
-
+            RecipeEntry recipeEntry = new RecipeEntry(recipe.getRecipeName(), i);
+            mDb.recipeDao().insertRecipe(recipeEntry);
         }
 
         //TODO check table, remove
@@ -191,8 +197,13 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
         mIndicator.setVisibility(View.INVISIBLE);
     }
 
-    private int queryLoader() { return Integer.parseInt(getString(R.string.query_loader)); }
-    private String queryString() { return getString(R.string.query); }
+    private int queryLoader() {
+        return Integer.parseInt(getString(R.string.query_loader));
+    }
+
+    private String queryString() {
+        return getString(R.string.query);
+    }
 
     @Override
     public void onClick(Recipe recipe) {

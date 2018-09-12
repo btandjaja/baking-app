@@ -1,7 +1,6 @@
 package com.btandjaja.www.bakingrecipes.data;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -45,27 +44,6 @@ public class InstructionAdapter extends RecyclerView.Adapter<InstructionAdapter.
                 mHandler.OnClick(viewHolder.getAdapterPosition());
             }
         });
-//        viewHolder.mCardView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                int position = viewHolder.getAdapterPosition();
-//                String videoUrl = mRecipe.getVideoUrlList().get(position);
-//                int step = position;
-//                String recipeName = mRecipe.getRecipeName();
-//                if (!ListOfRecipesActivity.mTabletMode) {
-//                    if (TextUtils.isEmpty(videoUrl)) {
-//                        Toast.makeText(mContext, mContext.getResources().getString(R.string.video_not_available),
-//                                Toast.LENGTH_LONG).show();
-//                    } else {
-//                        Intent intent = new Intent(mContext, VideoActivity.class);
-//                        intent.putExtra(mContext.getResources().getString(R.string.video_url), videoUrl);
-//                        intent.putExtra(mContext.getResources().getString(R.string.step), step);
-//                        intent.putExtra(mContext.getResources().getString(R.string.name), recipeName);
-//                        mContext.startActivity(intent);
-//                    }
-//                }
-//            }
-//        });
         return viewHolder;
     }
 

@@ -7,13 +7,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 
+import com.btandjaja.www.bakingrecipes.data.RecipeDatabase;
+
 /**
  * Implementation of App Widget functionality.
  */
 public class BakingWidgetProvider extends AppWidgetProvider {
 
+    private static RecipeDatabase mDb;
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
+        mDb = RecipeDatabase.getsInstance(context);
+
+        // TODO retrieved recipe list from database
+        mDb.recipeDao().loadAllRecipes();
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_widget);
 
