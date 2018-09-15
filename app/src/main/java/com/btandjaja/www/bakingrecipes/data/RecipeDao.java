@@ -15,8 +15,8 @@ public interface RecipeDao {
     @Query("SELECT * FROM recipelist ORDER BY arrayListIndex")
     LiveData<List<RecipeEntry>> loadAllRecipes();
 
-    @Query("SELECT * FROM recipelist WHERE id = :id")
-    LiveData<RecipeEntry> loadRecipeById(int id);
+    @Query("SELECT * FROM recipelist WHERE arrayListIndex = :arrayListIndex")
+    LiveData<RecipeEntry> loadRecipeById(int arrayListIndex);
 
     @Insert
     void insertRecipe(RecipeEntry recipeEntry);

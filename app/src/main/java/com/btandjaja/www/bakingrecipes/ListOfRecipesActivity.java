@@ -1,5 +1,7 @@
 package com.btandjaja.www.bakingrecipes;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -16,9 +18,11 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.btandjaja.www.bakingrecipes.data.AppExecutors;
 import com.btandjaja.www.bakingrecipes.data.Recipe;
 import com.btandjaja.www.bakingrecipes.data.RecipeDatabase;
 import com.btandjaja.www.bakingrecipes.data.RecipeEntry;
+import com.btandjaja.www.bakingrecipes.data.RecipeListViewModel;
 import com.btandjaja.www.bakingrecipes.data.RecipesAdapter;
 import com.btandjaja.www.bakingrecipes.utilities.NetworkUtils;
 import com.btandjaja.www.bakingrecipes.utilities.RecipesUtils;
@@ -44,14 +48,16 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
 
     // database variable
     private RecipeDatabase mDb;
+    private RecipeEntry
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_recipes);
         ButterKnife.bind(this);
-        // get database
+        // connect to the database
         mDb = RecipeDatabase.getsInstance(getApplicationContext());
+        getRecipeEntries();
         if (savedInstanceState == null) {
             mTabletMode = findViewById(R.id.rl_tablet_mode) != null;
             initializeValriable();
@@ -60,6 +66,11 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
             loadRecipeData();
             getSupportLoaderManager().initLoader(queryLoader(), null, this);
         }
+    }
+
+    private void getRecipeEntries() {
+        RecipeListViewModel vm = ViewModelProviders.of(this).get(RecipeListViewModel.class);
+        
     }
 
     private void initializeValriable() {
@@ -153,10 +164,40 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
      * Add recipe to database if it's not in database
      */
     private void addRecipeToDb() {
+//        AddRecipeViewModelFactory factory = new AddRecipeViewModelFactory(mDb, )
+//        ViewModel vm = ViewModelProviders.of(this).get(ViewModel.class);
+//        vm.getRecipeEntries().observe(this, new Observer<List<RecipeEntry>>() {
+//            @Override
+//            public void onChanged(@Nullable List<RecipeEntry> recipeEntries) {
+//
+//            }
+//        });
+//        vm.getRecipeEntries().getValue().
         for (int i = 0; i < mRecipesList.size(); i++) {
-            Recipe recipe = mRecipesList.get(i);
-            RecipeEntry recipeEntry = new RecipeEntry(recipe.getRecipeName(), i);
-            mDb.recipeDao().insertRecipe(recipeEntry);
+            final Recipe recipe = mRecipesList.get(i);
+            final LiveData<RecipeEntry> recipeEntry = mDb.recipeDao().loadRecipeById(i);
+            final RecipeEntry newEntry = new RecipeEntry(recipe.getRecipeName(), i);
+            AppExecutors.getsInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    if (recipeEntry != null || recipeEntry.getValue().getRecipeName().equals(recipe.getRecipeName())) {
+                        // update
+                        mDb.recipeDao().updateRecipe(newEntry);
+                    } else {
+                        // insert
+                        mDb.recipeDao().insertRecipe(newEntry);
+                    }
+                }
+            });
+
+//            final RecipeEntry recipeEntry = new RecipeEntry(recipe.getRecipeName(), i);
+//            AppExecutors.getsInstance().diskIO().execute(new Runnable() {
+//                @Override
+//                public void run() {
+//                    mDb.recipeDao().insertRecipe(recipeEntry);
+//                }
+//            });
+
         }
 
         //TODO check table, remove
