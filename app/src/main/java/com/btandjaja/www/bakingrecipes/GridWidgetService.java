@@ -1,6 +1,7 @@
 package com.btandjaja.www.bakingrecipes;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.widget.RemoteViewsService;
 
 import com.btandjaja.www.bakingrecipes.data.RecipeDatabase;
 import com.btandjaja.www.bakingrecipes.data.RecipeEntry;
+import com.btandjaja.www.bakingrecipes.data.RecipeListViewModel;
 
 import java.util.List;
 
@@ -51,7 +53,8 @@ class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     @Override
     public RemoteViews getViewAt(int position) {
         LiveData<RecipeEntry> recipeEntry = mDb.recipeDao().loadRecipeById(position);
-        ViewModel vm = ViewModelProviders.of(this).get(ViewModel.class);
+        // TODO confused
+//        RecipeListViewModel vm = ViewModelProviders.of(this).get(RecipeListViewModel.class);
         return null;
     }
 /**************/
