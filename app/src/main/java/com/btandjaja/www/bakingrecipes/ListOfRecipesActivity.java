@@ -152,6 +152,7 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
             showError();
             return;
         }
+        // to prevent from stacking the same recipes when maneuvering between activies
         if (mRecipesList.size() == 0) RecipesUtils.getRecipesList(this, jsonString, mRecipesList);
         // Add recipe to database if it's not already on database
         addRecipeToDb();
@@ -177,15 +178,16 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
             final Recipe recipe = mRecipesList.get(i);
             final RecipeEntry recipeEntry = mRecipeEntries.size() == 0 ? null : mRecipeEntries.get(i);
             final RecipeEntry newEntry = new RecipeEntry(recipe.getRecipeName(), i);
-            AppExecutors.getsInstance().diskIO().execute(new Runnable() {
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
-                    if (recipeEntry != null || recipeEntry.getRecipeName().equals(recipe.getRecipeName())) {
-                        // update
-                        mDb.recipeDao().updateRecipe(newEntry);
-                    } else {
+                    Log.d("*****", String.valueOf(recipeEntry == null));
+                    if (recipeEntry == null) {
                         // insert
                         mDb.recipeDao().insertRecipe(newEntry);
+                    } else {
+                        // update
+                        mDb.recipeDao().updateRecipe(newEntry);
                     }
                 }
             });
@@ -196,6 +198,14 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
 
     // TODO remove
     private void checkDb() {
+        RecipeListViewModel vm = ViewModelProviders.of(this).get(RecipeListViewModel.class);
+        vm.getRecipeEntries().observe(this, new Observer<List<RecipeEntry>>() {
+            @Override
+            public void onChanged(@Nullable List<RecipeEntry> recipeEntries) {
+                mRecipeEntries = recipeEntries;
+            }
+        });
+        Log.d("******", String.valueOf(mRecipeEntries.size()));
         for (RecipeEntry entry : mRecipeEntries) {
             Log.d("*******", entry.getRecipeName() + " " + String.valueOf(entry.getArrayListIndex()));
         }
