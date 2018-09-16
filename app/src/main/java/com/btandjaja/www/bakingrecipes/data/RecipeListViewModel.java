@@ -3,8 +3,6 @@ package com.btandjaja.www.bakingrecipes.data;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
-import android.content.AsyncTaskLoader;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 

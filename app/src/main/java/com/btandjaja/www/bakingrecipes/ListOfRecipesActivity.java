@@ -1,9 +1,6 @@
 package com.btandjaja.www.bakingrecipes;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,12 +12,10 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.btandjaja.www.bakingrecipes.data.AppExecutors;
 import com.btandjaja.www.bakingrecipes.data.Recipe;
 import com.btandjaja.www.bakingrecipes.data.RecipeDatabase;
 import com.btandjaja.www.bakingrecipes.data.RecipeEntry;
@@ -31,7 +26,6 @@ import com.btandjaja.www.bakingrecipes.utilities.RecipesUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,9 +47,6 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
     private RecipeDatabase mDb;
     private RecipeListViewModel mRecipeListViewModel;
 
-    //TODO remove
-    private String TAG = "*******";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +54,7 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
         ButterKnife.bind(this);
         // connect to the database
         mDb = RecipeDatabase.getsInstance(getApplicationContext());
-        insertRecipesToEmptyDatabase();
+        setViewModelAndDeleteDb();
         if (savedInstanceState == null) {
             mTabletMode = findViewById(R.id.rl_tablet_mode) != null;
             initializeValriable();
@@ -74,16 +65,8 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
         }
     }
 
-    private void insertRecipesToEmptyDatabase() {
+    private void setViewModelAndDeleteDb() {
         mRecipeListViewModel = ViewModelProviders.of(this).get(RecipeListViewModel.class);
-        mRecipeListViewModel.getRecipeEntries().observe(this, new Observer<List<RecipeEntry>>() {
-            @Override
-            public void onChanged(@Nullable List<RecipeEntry> recipeEntries) {
-                for (RecipeEntry entry : recipeEntries) {
-                    Log.d(TAG, entry.getRecipeName() + ": " + String.valueOf(entry.getArrayListIndex()));
-                }
-            }
-        });
         mRecipeListViewModel.deleteAll();
     }
 
@@ -182,42 +165,8 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
         for (int i = 0; i < mRecipesList.size(); i++) {
             final Recipe recipe = mRecipesList.get(i);
             final RecipeEntry newEntry = new RecipeEntry(recipe.getRecipeName(), i);
-            Log.d(TAG, newEntry.getRecipeName() + String.valueOf(newEntry.getArrayListIndex()));
             mRecipeListViewModel.insertRecipe(newEntry);
-//            AppExecutors.getInstance().diskIO().execute(new Runnable() {
-//                @Override
-//                public void run() {
-//                        mDb.recipeDao().insertRecipe(newEntry);
-//                }
-//            });
         }
-        // TODO remove
-        checkDb();
-    }
-
-    // TODO remove
-    private void checkDb() {
-//        LiveData<List<RecipeEntry>> entries = mDb.recipeDao().loadAllRecipes();
-//        List<RecipeEntry> recipeEntries = entries.getValue();
-//        AppExecutors.getInstance().diskIO().execute(new Runnable() {
-//            @Override
-//            public void run() {
-//                List<RecipeEntry> data = mDb.recipeDao().loadAllRecipes().getValue();
-//                showInsideDb(data);
-//            }
-//        });
-    }
-
-    // TODO remove
-    private void showInsideDb(List<RecipeEntry> entries) {
-        for(RecipeEntry entry : entries) {
-            Log.d(TAG, String.valueOf(entry.getId()) + ": " + entry.getRecipeName() + ": " + String.valueOf(entry.getArrayListIndex()) );
-        }
-    }
-
-    private ContentValues createContentValue(String recipeName, int index) {
-
-        return null;
     }
 
     private void setAdapter() {
