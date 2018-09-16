@@ -76,6 +76,14 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
 
     private void insertRecipesToEmptyDatabase() {
         mRecipeListViewModel = ViewModelProviders.of(this).get(RecipeListViewModel.class);
+        mRecipeListViewModel.getRecipeEntries().observe(this, new Observer<List<RecipeEntry>>() {
+            @Override
+            public void onChanged(@Nullable List<RecipeEntry> recipeEntries) {
+                for (RecipeEntry entry : recipeEntries) {
+                    Log.d(TAG, entry.getRecipeName() + ": " + String.valueOf(entry.getArrayListIndex()));
+                }
+            }
+        });
         mRecipeListViewModel.deleteAll();
     }
 
@@ -189,15 +197,15 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
 
     // TODO remove
     private void checkDb() {
-        LiveData<List<RecipeEntry>> entries = mDb.recipeDao().loadAllRecipes();
-        List<RecipeEntry> recipeEntries = entries.getValue();
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                List<RecipeEntry> data = mDb.recipeDao().loadAllRecipes().getValue();
-                showInsideDb(data);
-            }
-        });
+//        LiveData<List<RecipeEntry>> entries = mDb.recipeDao().loadAllRecipes();
+//        List<RecipeEntry> recipeEntries = entries.getValue();
+//        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+//            @Override
+//            public void run() {
+//                List<RecipeEntry> data = mDb.recipeDao().loadAllRecipes().getValue();
+//                showInsideDb(data);
+//            }
+//        });
     }
 
     // TODO remove
