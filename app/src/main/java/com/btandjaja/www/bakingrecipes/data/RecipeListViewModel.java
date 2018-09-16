@@ -32,6 +32,10 @@ public class RecipeListViewModel extends AndroidViewModel {
         new DeleteAll(mDb).execute();
     }
 
+    public void insertRecipe(RecipeEntry recipeEntry) {
+        new InsertEntry(mDb).execute(recipeEntry);
+    }
+
     private static class DeleteAll extends AsyncTask<Void, Void, Void> {
         private RecipeDatabase mDb;
         public DeleteAll(RecipeDatabase db) {
@@ -41,6 +45,19 @@ public class RecipeListViewModel extends AndroidViewModel {
         @Override
         protected Void doInBackground(Void... voids) {
             mDb.recipeDao().deleteAll();
+            return null;
+        }
+    }
+
+    private static class InsertEntry extends AsyncTask<RecipeEntry, Void, Void> {
+        private RecipeDatabase mDb;
+        public InsertEntry(RecipeDatabase db) {
+            mDb = db;
+        }
+
+        @Override
+        protected Void doInBackground(RecipeEntry... recipeEntries) {
+            mDb.recipeDao().insertRecipe(recipeEntries[0]);
             return null;
         }
     }

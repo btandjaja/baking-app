@@ -53,6 +53,9 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
     private RecipeDatabase mDb;
     private RecipeListViewModel mRecipeListViewModel;
 
+    //TODO remove
+    private String TAG = "*******";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -170,23 +173,15 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
     private void addRecipeToDb() {
         for (int i = 0; i < mRecipesList.size(); i++) {
             final Recipe recipe = mRecipesList.get(i);
-//            final LiveData<RecipeEntry> recipeEntry = mRecipeListViewModel.getRecipeEntry(recipe.getRecipeName());
             final RecipeEntry newEntry = new RecipeEntry(recipe.getRecipeName(), i);
-            AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                @Override
-                public void run() {
-//                    Log.d("*****", String.valueOf(recipeEntry == null));
-
-//                    if (recipeEntry == null) {
-                        // insert
-                        mDb.recipeDao().insertRecipe(newEntry);
-//                    }
-//                    else {
-//                        // update
-//                        mDb.recipeDao().updateRecipe(newEntry);
-//                    }
-                }
-            });
+            Log.d(TAG, newEntry.getRecipeName() + String.valueOf(newEntry.getArrayListIndex()));
+            mRecipeListViewModel.insertRecipe(newEntry);
+//            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+//                @Override
+//                public void run() {
+//                        mDb.recipeDao().insertRecipe(newEntry);
+//                }
+//            });
         }
         // TODO remove
         checkDb();
@@ -194,23 +189,22 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
 
     // TODO remove
     private void checkDb() {
-//        mRecipeListViewModel.getRecipeEntries().observe(this, new Observer<List<RecipeEntry>>() {
-//            @Override
-//            public void onChanged(@Nullable List<RecipeEntry> recipeEntries) {
-//                mRecipeEntries = recipeEntries;
-//            }
-//        });
-//        Log.d("******", String.valueOf(mRecipeEntries.size()));
-//        for (RecipeEntry entry : mRecipeEntries) {
-//            Log.d("*******", entry.getRecipeName() + " " + String.valueOf(entry.getArrayListIndex()));
-//        }
-        int size = mRecipeListViewModel.getRecipeEntries().getValue().size();
-        List<RecipeEntry> entries = mRecipeListViewModel.getRecipeEntries().getValue();
+        LiveData<List<RecipeEntry>> entries = mDb.recipeDao().loadAllRecipes();
+        List<RecipeEntry> recipeEntries = entries.getValue();
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                List<RecipeEntry> data = mDb.recipeDao().loadAllRecipes().getValue();
+                showInsideDb(data);
+            }
+        });
+    }
 
-        for (RecipeEntry entry: entries) {
-            Log.d("******", entry.getId() + ": " + entry.getRecipeName() + ": " + entry.getArrayListIndex());
+    // TODO remove
+    private void showInsideDb(List<RecipeEntry> entries) {
+        for(RecipeEntry entry : entries) {
+            Log.d(TAG, String.valueOf(entry.getId()) + ": " + entry.getRecipeName() + ": " + String.valueOf(entry.getArrayListIndex()) );
         }
-        Log.d("*******", "end of recipe list");
     }
 
     private ContentValues createContentValue(String recipeName, int index) {

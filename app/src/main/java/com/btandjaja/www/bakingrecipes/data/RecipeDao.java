@@ -12,7 +12,7 @@ import java.util.List;
 
 @Dao
 public interface RecipeDao {
-    @Query("SELECT * FROM recipelist ORDER BY arrayListIndex")
+    @Query("SELECT * FROM recipelist")
     LiveData<List<RecipeEntry>> loadAllRecipes();
 
     @Query("SELECT * FROM recipelist WHERE recipeName = :recipeName")
