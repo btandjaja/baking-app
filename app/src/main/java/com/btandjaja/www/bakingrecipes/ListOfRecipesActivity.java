@@ -51,7 +51,7 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
 
     // database variable
     private RecipeDatabase mDb;
-    private List<RecipeEntry> mRecipeEntries;
+    private RecipeListViewModel mRecipeListViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +60,7 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
         ButterKnife.bind(this);
         // connect to the database
         mDb = RecipeDatabase.getsInstance(getApplicationContext());
-        getRecipeEntries();
+        insertRecipesToEmptyDatabase();
         if (savedInstanceState == null) {
             mTabletMode = findViewById(R.id.rl_tablet_mode) != null;
             initializeValriable();
@@ -71,15 +71,9 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
         }
     }
 
-    private void getRecipeEntries() {
-        RecipeListViewModel vm = ViewModelProviders.of(this).get(RecipeListViewModel.class);
-        vm.getRecipeEntries().observe(this, new Observer<List<RecipeEntry>>() {
-            @Override
-            public void onChanged(@Nullable List<RecipeEntry> recipeEntries) {
-                // Updating list of recipes from LiveData in ViewModel
-                mRecipeEntries = recipeEntries;
-            }
-        });
+    private void insertRecipesToEmptyDatabase() {
+        mRecipeListViewModel = ViewModelProviders.of(this).get(RecipeListViewModel.class);
+        mRecipeListViewModel.deleteAll();
     }
 
     private void initializeValriable() {
@@ -176,19 +170,21 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
     private void addRecipeToDb() {
         for (int i = 0; i < mRecipesList.size(); i++) {
             final Recipe recipe = mRecipesList.get(i);
-            final RecipeEntry recipeEntry = mRecipeEntries.size() == 0 ? null : mRecipeEntries.get(i);
+//            final LiveData<RecipeEntry> recipeEntry = mRecipeListViewModel.getRecipeEntry(recipe.getRecipeName());
             final RecipeEntry newEntry = new RecipeEntry(recipe.getRecipeName(), i);
             AppExecutors.getInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
-                    Log.d("*****", String.valueOf(recipeEntry == null));
-                    if (recipeEntry == null) {
+//                    Log.d("*****", String.valueOf(recipeEntry == null));
+
+//                    if (recipeEntry == null) {
                         // insert
                         mDb.recipeDao().insertRecipe(newEntry);
-                    } else {
-                        // update
-                        mDb.recipeDao().updateRecipe(newEntry);
-                    }
+//                    }
+//                    else {
+//                        // update
+//                        mDb.recipeDao().updateRecipe(newEntry);
+//                    }
                 }
             });
         }
@@ -198,16 +194,20 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
 
     // TODO remove
     private void checkDb() {
-        RecipeListViewModel vm = ViewModelProviders.of(this).get(RecipeListViewModel.class);
-        vm.getRecipeEntries().observe(this, new Observer<List<RecipeEntry>>() {
-            @Override
-            public void onChanged(@Nullable List<RecipeEntry> recipeEntries) {
-                mRecipeEntries = recipeEntries;
-            }
-        });
-        Log.d("******", String.valueOf(mRecipeEntries.size()));
-        for (RecipeEntry entry : mRecipeEntries) {
-            Log.d("*******", entry.getRecipeName() + " " + String.valueOf(entry.getArrayListIndex()));
+//        mRecipeListViewModel.getRecipeEntries().observe(this, new Observer<List<RecipeEntry>>() {
+//            @Override
+//            public void onChanged(@Nullable List<RecipeEntry> recipeEntries) {
+//                mRecipeEntries = recipeEntries;
+//            }
+//        });
+//        Log.d("******", String.valueOf(mRecipeEntries.size()));
+//        for (RecipeEntry entry : mRecipeEntries) {
+//            Log.d("*******", entry.getRecipeName() + " " + String.valueOf(entry.getArrayListIndex()));
+//        }
+        List<RecipeEntry> entries = mRecipeListViewModel.getRecipeEntries().getValue();
+
+        for (RecipeEntry entry: entries) {
+            Log.d("******", entry.getId() + ": " + entry.getRecipeName() + ": " + entry.getArrayListIndex());
         }
         Log.d("*******", "end of recipe list");
     }

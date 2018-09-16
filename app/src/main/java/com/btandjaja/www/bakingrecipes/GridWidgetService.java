@@ -52,7 +52,7 @@ class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     // same as onBindViewHolder
     @Override
     public RemoteViews getViewAt(int position) {
-        LiveData<RecipeEntry> recipeEntry = mDb.recipeDao().loadRecipeById(position);
+        LiveData<RecipeEntry> recipeEntry = mDb.recipeDao().loadRecipeByArrListIndex(position);
         // TODO confused
 //        RecipeListViewModel vm = ViewModelProviders.of(this).get(RecipeListViewModel.class);
         return null;

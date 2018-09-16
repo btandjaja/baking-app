@@ -15,8 +15,14 @@ public interface RecipeDao {
     @Query("SELECT * FROM recipelist ORDER BY arrayListIndex")
     LiveData<List<RecipeEntry>> loadAllRecipes();
 
-    @Query("SELECT * FROM recipelist WHERE arrayListIndex = :arrayListIndex")
-    LiveData<RecipeEntry> loadRecipeById(int arrayListIndex);
+    @Query("SELECT * FROM recipelist WHERE recipeName = :recipeName")
+    LiveData<RecipeEntry> loadRecipeByName(String recipeName);
+
+    @Query("SELECT * FROM recipelist WHERE arrayListIndex = :arrListIndex")
+    LiveData<RecipeEntry> loadRecipeByArrListIndex(int arrListIndex);
+
+    @Query("DELETE FROM recipelist")
+    void deleteAll();
 
     @Insert
     void insertRecipe(RecipeEntry recipeEntry);

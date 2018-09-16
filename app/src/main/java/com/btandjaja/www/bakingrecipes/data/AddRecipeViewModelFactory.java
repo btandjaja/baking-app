@@ -6,15 +6,15 @@ import android.support.annotation.NonNull;
 
 public class AddRecipeViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     private final RecipeDatabase mDb;
-    private final int mRecipeId;
+    private final String mRecipeName;
 
-    public AddRecipeViewModelFactory(RecipeDatabase db, int recipeId) {
-        mDb = db; mRecipeId = recipeId;
+    public AddRecipeViewModelFactory(RecipeDatabase db, String recipeName) {
+        mDb = db; mRecipeName = recipeName;
     }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new AddRecipeViewModel(mDb, mRecipeId);
+        return (T) new AddRecipeViewModel(mDb, mRecipeName);
     }
 }
