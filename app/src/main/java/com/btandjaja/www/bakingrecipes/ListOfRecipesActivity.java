@@ -204,6 +204,7 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
 //        for (RecipeEntry entry : mRecipeEntries) {
 //            Log.d("*******", entry.getRecipeName() + " " + String.valueOf(entry.getArrayListIndex()));
 //        }
+        int size = mRecipeListViewModel.getRecipeEntries().getValue().size();
         List<RecipeEntry> entries = mRecipeListViewModel.getRecipeEntries().getValue();
 
         for (RecipeEntry entry: entries) {

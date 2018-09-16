@@ -3,6 +3,9 @@ package com.btandjaja.www.bakingrecipes.data;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
+import android.content.AsyncTaskLoader;
+import android.content.Context;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
 import java.util.List;
@@ -26,6 +29,19 @@ public class RecipeListViewModel extends AndroidViewModel {
         return mDb.recipeDao().loadRecipeByName(recipeName);
     }
     public void deleteAll() {
-        mDb.recipeDao().deleteAll();
+        new DeleteAll(mDb).execute();
+    }
+
+    private static class DeleteAll extends AsyncTask<Void, Void, Void> {
+        private RecipeDatabase mDb;
+        public DeleteAll(RecipeDatabase db) {
+            mDb = db;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            mDb.recipeDao().deleteAll();
+            return null;
+        }
     }
 }
