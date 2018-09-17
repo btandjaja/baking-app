@@ -1,5 +1,7 @@
 package com.btandjaja.www.bakingrecipes;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -12,6 +14,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,6 +29,7 @@ import com.btandjaja.www.bakingrecipes.utilities.RecipesUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,6 +53,7 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_recipes);
         ButterKnife.bind(this);
@@ -61,8 +66,8 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
             createAdapter();
             setRecyclerView();
             loadRecipeData();
-            getSupportLoaderManager().initLoader(queryLoader(), null, this);
         }
+        getSupportLoaderManager().initLoader(queryLoader(), null, this);
     }
 
     private void setViewModelAndDeleteDb() {
@@ -146,6 +151,7 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
         addRecipeToDb();
         setAdapter();
         showData();
+        checkParentIntent();
     }
 
     /**
@@ -166,6 +172,15 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
             final Recipe recipe = mRecipesList.get(i);
             final RecipeEntry newEntry = new RecipeEntry(recipe.getRecipeName(), i);
             mRecipeListViewModel.insertRecipe(newEntry);
+        }
+    }
+
+    private void checkParentIntent() {
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            int position = extras.getInt(getResources().getString(R.string.POSITION));
+            mRecyclerView.findViewHolderForAdapterPosition(position).itemView.performClick();
         }
     }
 

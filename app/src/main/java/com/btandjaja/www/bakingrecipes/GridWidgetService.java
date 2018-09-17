@@ -5,6 +5,8 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -27,19 +29,16 @@ class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     // database variable
     RecipeDatabase mDb;
     LiveData<List<RecipeEntry>> mRecipeEntries;
+    String[] DEFAULT_RECIPES = new String[] {"Nutella Pie", "Brownies", "Yellow Cake", "Cheesecake"};
+    String[] DEFAULT_RECIPES_IMG = new String[] {"nutella_pie", "brownies", "moist_yellow_cake", "cheese_cake"};
 
     public GridRemoteViewsFactory(Context applicationContext) { mContext = applicationContext; }
 
     @Override
-    public void onCreate() {
-    }
+    public void onCreate() { }
 
     @Override
-    public void onDataSetChanged() {
-        // TODO retrieve data from db
-        mRecipeEntries = mDb.recipeDao().loadAllRecipes();
-
-    }
+    public void onDataSetChanged() { mRecipeEntries = mDb.recipeDao().loadAllRecipes(); }
 
     @Override
     public void onDestroy() { }
@@ -52,29 +51,44 @@ class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     // same as onBindViewHolder
     @Override
     public RemoteViews getViewAt(int position) {
-        LiveData<RecipeEntry> recipeEntry = mDb.recipeDao().loadRecipeByArrListIndex(position);
-        // TODO confused
-//        RecipeListViewModel vm = ViewModelProviders.of(this).get(RecipeListViewModel.class);
+        List<RecipeEntry> recipeEntries= mDb.recipeDao().loadAllRecipes().getValue();
+        RecipeEntry recipeEntry = recipeEntries.get(position);
+        int imgResource = getImage(recipeEntry);
+        RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.baking_widget);
+        views.setImageViewResource(R.id.iv_widget_baking_image, imgResource);
+        Bundle extras = new Bundle();
+        extras.putInt(mContext.getString(R.string.POSITION), recipeEntry.getArrayListIndex());
+        Intent fillInIntent = new Intent();
+        fillInIntent.putExtras(extras);
+        views.setOnClickFillInIntent(R.id.iv_widget_baking_image, fillInIntent);
         return null;
     }
-/**************/
-    @Override
-    public RemoteViews getLoadingView() {
-        return null;
+
+    private int getImage(RecipeEntry recipeEntry) {
+        String identifier = "";
+        for (int i = 0; i < DEFAULT_RECIPES.length; i++) {
+            if (recipeEntry.getRecipeName().equals(DEFAULT_RECIPES[i])) {
+                identifier = DEFAULT_RECIPES_IMG[i];
+                break;
+            }
+        }
+        if (TextUtils.isEmpty(identifier)) {
+            identifier = "no_image";
+        }
+        return mContext.getResources().getIdentifier(recipeEntry.getRecipeName(),
+                "drawable", mContext.getPackageName());
     }
 
     @Override
-    public int getViewTypeCount() {
-        return 0;
-    }
+    public RemoteViews getLoadingView() { return null; }
+
+    // Treat all items in the GridView the same
+    @Override
+    public int getViewTypeCount() { return 1; }
 
     @Override
-    public long getItemId(int position) {
-        return 0;
-    }
+    public long getItemId(int position) { return position; }
 
     @Override
-    public boolean hasStableIds() {
-        return false;
-    }
+    public boolean hasStableIds() { return false; }
 }
