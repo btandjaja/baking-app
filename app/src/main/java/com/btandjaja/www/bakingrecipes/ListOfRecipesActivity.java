@@ -209,7 +209,7 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
     private void addRecipeToDatabase(Recipe recipe) {
         for (int i=0; i < recipe.getSteps(); i++) {
             RecipeEntry recipeEntry = new RecipeEntry(recipe.getRecipeName(),
-                    recipe.getIngredientsArrList()[i],
+                    recipe.get
                     )
         }
     }

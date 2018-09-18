@@ -8,22 +8,30 @@ import android.arch.persistence.room.PrimaryKey;
 public class RecipeEntry {
     @PrimaryKey(autoGenerate = true)
     private int id;
-    private String mRecipeName, mIngredient, mVideoLink;
+    private String mRecipeName, mIngredient, mVideoLink, mShortDescription, mDescription, mThumbnailUrl;
     private int mStepNum;
 
     @Ignore
-    public RecipeEntry(String recipeName, String ingredient, String videoLink, int stepNum) {
+    public RecipeEntry(String recipeName, String ingredient, String videoLink, String shortDescription,
+                       String description, String thumbnailUrl, int stepNum) {
         this.mRecipeName = recipeName;
         this.mIngredient = ingredient;
         this.mVideoLink = videoLink;
+        this.mShortDescription = shortDescription;
+        this.mDescription = description;
+        this.mThumbnailUrl = thumbnailUrl;
         this.mStepNum = stepNum;
     }
 
-    public RecipeEntry(int id, String recipeName, String ingredient, String videoLink, int stepNum) {
+    public RecipeEntry(int id, String recipeName, String ingredient, String videoLink, String shortDescription,
+                       String description, String thumbnailUrl, int stepNum) {
         this.id = id;
         this.mRecipeName = recipeName;
         this.mIngredient = ingredient;
         this.mVideoLink = videoLink;
+        this.mShortDescription = shortDescription;
+        this.mDescription = description;
+        this.mThumbnailUrl = thumbnailUrl;
         this.mStepNum = stepNum;
     }
 
