@@ -75,13 +75,9 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
         mRecipeListViewModel.deleteAll();
     }
 
-    private void initializeValriable() {
-        mRecipesList = new ArrayList<>();
-    }
+    private void initializeValriable() { mRecipesList = new ArrayList<>(); }
 
-    private void createAdapter() {
-        mRecipeAdapter = new RecipesAdapter(this);
-    }
+    private void createAdapter() { mRecipeAdapter = new RecipesAdapter(this); }
 
     private void setRecyclerView() {
         // Default gridView count
@@ -147,8 +143,6 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
         }
         // to prevent from stacking the same recipes when maneuvering between activies
         if (mRecipesList.size() == 0) RecipesUtils.getRecipesList(this, jsonString, mRecipesList);
-        // Add recipe to database if it's not already on database
-        addRecipeToDb();
         setAdapter();
         showData();
         checkParentIntent();
@@ -160,20 +154,7 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
      * @param loader
      */
     @Override
-    public void onLoaderReset(@NonNull Loader<String> loader) {
-
-    }
-
-    /**
-     * Add recipe to database if it's not in database
-     */
-    private void addRecipeToDb() {
-        for (int i = 0; i < mRecipesList.size(); i++) {
-            final Recipe recipe = mRecipesList.get(i);
-            final RecipeEntry newEntry = new RecipeEntry(recipe.getRecipeName(), i);
-            mRecipeListViewModel.insertRecipe(newEntry);
-        }
-    }
+    public void onLoaderReset(@NonNull Loader<String> loader) { }
 
     private void checkParentIntent() {
         Intent intent = getIntent();
@@ -219,8 +200,17 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
 
     @Override
     public void onClick(Recipe recipe) {
+        addRecipeToDatabase(recipe);
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra(Recipe.RECIPE, recipe);
         startActivity(intent);
+    }
+
+    private void addRecipeToDatabase(Recipe recipe) {
+        for (int i=0; i < recipe.getSteps(); i++) {
+            RecipeEntry recipeEntry = new RecipeEntry(recipe.getRecipeName(),
+                    recipe.getIngredientsArrList()[i],
+                    )
+        }
     }
 }

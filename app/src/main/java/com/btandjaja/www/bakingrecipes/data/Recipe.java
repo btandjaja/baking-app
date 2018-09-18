@@ -76,6 +76,11 @@ public class Recipe implements Parcelable{
     public String getRecipeName() { return mRecipeName; }
     public String getImagePath() { return mImagePath; }
     public String getIngredientsString() { return stringCombineHelper(mIngredients); }
+    public String getIngredientFromIndex(int index) { return mIngredients.get(index); }
+    public String getVideoLinkFromIndex(int index) { return mVideoUrl.get(index); }
+    public String getDescriptionFromIndex(int index) { return mDescription.get(index); }
+    public String getShortDescriptionFromIndex(int index) { return mShortDescription.get(index); }
+    public String getThumbnailUrlFromIndex(int index) { return mThumbnailUrl.get(index); }
     public ArrayList<String> getIngredientsArrList() { return mIngredients; }
     public ArrayList<String> getShortDescriptionList() { return mShortDescription; }
     public ArrayList<String> getDescriptionList() { return mDescription; }
