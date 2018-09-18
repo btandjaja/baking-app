@@ -200,6 +200,7 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
 
     @Override
     public void onClick(Recipe recipe) {
+        // add recipe to database to be opened from widget
         addRecipeToDatabase(recipe);
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra(Recipe.RECIPE, recipe);
@@ -209,8 +210,13 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
     private void addRecipeToDatabase(Recipe recipe) {
         for (int i=0; i < recipe.getSteps(); i++) {
             RecipeEntry recipeEntry = new RecipeEntry(recipe.getRecipeName(),
-                    recipe.get
-                    )
+                    recipe.getIngredientFromIndex(i),
+                    recipe.getVideoLinkFromIndex(i),
+                    recipe.getShortDescriptionFromIndex(i),
+                    recipe.getDescriptionFromIndex(i),
+                    recipe.getThumbnailUrlFromIndex(i),
+                    i);
+            mRecipeListViewModel.insertRecipe(recipeEntry);
         }
     }
 }
