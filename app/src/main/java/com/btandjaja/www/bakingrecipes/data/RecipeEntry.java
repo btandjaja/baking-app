@@ -40,6 +40,9 @@ public class RecipeEntry {
     public void setRecipeName(String recipeName) { this.mRecipeName = recipeName; }
     public void setIngredient(String ingredient) { this.mIngredient = ingredient; }
     public void setVideoLink(String videoLink) { this.mVideoLink = mVideoLink; }
+    public void setShortDescription(String shortDescription) { this.mShortDescription = shortDescription; }
+    public void setDescription(String description) { this.mDescription = description; }
+    public void setThumbnailUrl(String thumbnailUrl) { this.mThumbnailUrl = thumbnailUrl; }
     public void setStepNum(int stepNum) { this.mStepNum = stepNum; }
 
     // Getter
@@ -47,5 +50,8 @@ public class RecipeEntry {
     public String getRecipeName() { return this.mRecipeName; }
     public String getIngredient() { return this.mIngredient; }
     public String getVideoLink() { return this.mVideoLink; }
+    public String getShortDescription() { return this.mShortDescription; }
+    public String getDescription() { return this.mDescription; }
+    public String getThumbnailUrl() { return this.mThumbnailUrl; }
     public int getStepNum() { return this.mStepNum; }
 }
