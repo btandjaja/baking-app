@@ -8,28 +8,36 @@ import android.arch.persistence.room.PrimaryKey;
 public class RecipeEntry {
     @PrimaryKey(autoGenerate = true)
     private int id;
-    private String recipeName;
-    private int arrayListIndex;
+    private String mRecipeName, mIngredient, mVideoLink;
+    private int mStepNum;
 
     @Ignore
-    public RecipeEntry(String recipeName, int arrayListIndex) {
-        this.recipeName = recipeName;
-        this.arrayListIndex = arrayListIndex;
+    public RecipeEntry(String recipeName, String ingredient, String videoLink, int stepNum) {
+        this.mRecipeName = recipeName;
+        this.mIngredient = ingredient;
+        this.mVideoLink = videoLink;
+        this.mStepNum = stepNum;
     }
 
-    public RecipeEntry(int id, String recipeName, int arrayListIndex) {
+    public RecipeEntry(int id, String recipeName, String ingredient, String videoLink, int stepNum) {
         this.id = id;
-        this.recipeName = recipeName;
-        this.arrayListIndex = arrayListIndex;
+        this.mRecipeName = recipeName;
+        this.mIngredient = ingredient;
+        this.mVideoLink = videoLink;
+        this.mStepNum = stepNum;
     }
 
     // Setter
     public void setId(int id) { this.id = id; }
-    public void setRecipeName(String recipeName) { this.recipeName = recipeName; }
-    public void setArrayListIndex(int arrayListIndex) { this.arrayListIndex = arrayListIndex; }
+    public void setRecipeName(String recipeName) { this.mRecipeName = recipeName; }
+    public void setIngredient(String ingredient) { this.mIngredient = ingredient; }
+    public void setVideoLink(String videoLink) { this.mVideoLink = mVideoLink; }
+    public void setStepNum(int stepNum) { this.mStepNum = stepNum; }
 
     // Getter
     public int getId() { return this.id; }
-    public int getArrayListIndex() { return this.arrayListIndex; }
-    public String getRecipeName() {return this.recipeName;}
+    public String getRecipeName() { return this.mRecipeName; }
+    public String getIngredient() { return this.mIngredient; }
+    public String getVideoLink() { return this.mVideoLink; }
+    public int getStepNum() { return this.mStepNum; }
 }
