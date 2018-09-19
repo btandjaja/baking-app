@@ -1,7 +1,5 @@
 package com.btandjaja.www.bakingrecipes;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -14,7 +12,6 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -29,7 +26,6 @@ import com.btandjaja.www.bakingrecipes.utilities.RecipesUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -72,7 +68,10 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
 
     private void setViewModelAndDeleteDb() {
         mRecipeListViewModel = ViewModelProviders.of(this).get(RecipeListViewModel.class);
-        mRecipeListViewModel.deleteAll();
+        // reset database if there's data
+        if (mRecipeListViewModel.getRecipeEntries().getValue() != null)
+            if(mRecipeListViewModel.getRecipeEntries().getValue().size() > 0)
+                mRecipeListViewModel.deleteAll();
     }
 
     private void initializeValriable() { mRecipesList = new ArrayList<>(); }
@@ -145,7 +144,7 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
         if (mRecipesList.size() == 0) RecipesUtils.getRecipesList(this, jsonString, mRecipesList);
         setAdapter();
         showData();
-        checkParentIntent();
+//        checkParentIntent();
     }
 
     /**
@@ -156,14 +155,13 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
     @Override
     public void onLoaderReset(@NonNull Loader<String> loader) { }
 
-    private void checkParentIntent() {
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-        if (extras != null) {
-            int position = extras.getInt(getResources().getString(R.string.POSITION));
-            mRecyclerView.findViewHolderForAdapterPosition(position).itemView.performClick();
-        }
-    }
+//    private void checkParentIntent() {
+//        Intent intent = getIntent();
+//        Bundle extras = intent.getExtras();
+//        if (extras != null) {
+//            Toast.makeText(this, "*****testing", Toast.LENGTH_LONG).show();
+//        }
+//    }
 
     private void setAdapter() {
         mRecipeAdapter.setRecipeList(this, mRecipesList);
@@ -204,6 +202,7 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
         addRecipeToDatabase(recipe);
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra(Recipe.RECIPE, recipe);
+        intent.putExtra(getResources().getString(R.string.click_from_widget), false);
         startActivity(intent);
     }
 

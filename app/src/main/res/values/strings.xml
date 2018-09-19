@@ -54,9 +54,5 @@
     <!-- Widget -->
     <string name="appwidget_text">BANANA TEST</string>
     <string name="add_widget">Add widget</string>
-
-    <!-- widget grid view -->
-    <string name="get_recipe">Get Recipe!</string>
-    <string name="recipe_option">option</string>
-    <string name="POSITION">position</string>
+    <string name="click_from_widget">click_from_widget</string>
 </resources>
