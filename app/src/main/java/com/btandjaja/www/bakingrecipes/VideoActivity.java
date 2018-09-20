@@ -139,15 +139,16 @@ public class VideoActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        releasePlayer();
+    protected void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= 23) releasePlayer();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         mPlayer.stop(true);
+        if (Util.SDK_INT > 23) releasePlayer();
     }
 
     private void releasePlayer() {

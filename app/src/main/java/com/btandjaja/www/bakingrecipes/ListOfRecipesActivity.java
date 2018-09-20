@@ -1,5 +1,7 @@
 package com.btandjaja.www.bakingrecipes;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -12,6 +14,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,6 +29,7 @@ import com.btandjaja.www.bakingrecipes.utilities.RecipesUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -68,6 +72,21 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
 
     private void setViewModelAndDeleteDb() {
         mRecipeListViewModel = ViewModelProviders.of(this).get(RecipeListViewModel.class);
+
+        // TODO remove, view content
+        LiveData<List<RecipeEntry>> entries =  mDb.recipeDao().loadAllRecipes();
+        final String TAG = "******";
+//        Log.d(TAG, String.valueOf(entries.getValue() == null));
+        mRecipeListViewModel.getRecipeEntries().observe(this, new Observer<List<RecipeEntry>>() {
+            @Override
+            public void onChanged(@Nullable List<RecipeEntry> recipeEntries) {
+                if (recipeEntries != null) {
+                    for (int i = 0; i < recipeEntries.size(); i++) {
+                        Log.d(TAG, recipeEntries.get(i).getDescription());
+                    }
+                }
+            }
+        });
         // reset database if there's data
         if (mRecipeListViewModel.getRecipeEntries().getValue() != null)
             if(mRecipeListViewModel.getRecipeEntries().getValue().size() > 0)

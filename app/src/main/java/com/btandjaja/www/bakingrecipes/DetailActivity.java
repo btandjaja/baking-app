@@ -1,8 +1,10 @@
 package com.btandjaja.www.bakingrecipes;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -79,8 +81,15 @@ public class DetailActivity extends AppCompatActivity implements StepsFragment.O
 
     private Recipe getDataFromDatabase() {
         RecipeListViewModel vm = ViewModelProviders.of(this).get(RecipeListViewModel.class);
-        List<RecipeEntry> recipeSteps = vm.getRecipeEntries().getValue();
+        final List<RecipeEntry> recipeSteps = null ;
         Recipe recipe = new Recipe();
+
+        vm.getRecipeEntries().observe(this, new Observer<List<RecipeEntry>>() {
+            @Override
+            public void onChanged(@Nullable List<RecipeEntry> recipeEntries) {
+                getData(recipeEntries, recipeSteps);
+            }
+        });
 
         for (int i = 0; i < recipeSteps.size(); i++) {
             RecipeEntry entry = recipeSteps.get(i);
@@ -92,6 +101,10 @@ public class DetailActivity extends AppCompatActivity implements StepsFragment.O
             recipe.setDescription(entry.getDescription());
         }
         return recipe;
+    }
+
+    private void getData(List<RecipeEntry> recipeEntries, List<RecipeEntry> copyEntries) {
+        copyEntries = recipeEntries;
     }
     /**
      * Never called.
