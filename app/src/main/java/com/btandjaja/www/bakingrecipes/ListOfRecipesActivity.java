@@ -144,7 +144,6 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
         if (mRecipesList.size() == 0) RecipesUtils.getRecipesList(this, jsonString, mRecipesList);
         setAdapter();
         showData();
-//        checkParentIntent();
     }
 
     /**
@@ -154,14 +153,6 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
      */
     @Override
     public void onLoaderReset(@NonNull Loader<String> loader) { }
-
-//    private void checkParentIntent() {
-//        Intent intent = getIntent();
-//        Bundle extras = intent.getExtras();
-//        if (extras != null) {
-//            Toast.makeText(this, "*****testing", Toast.LENGTH_LONG).show();
-//        }
-//    }
 
     private void setAdapter() {
         mRecipeAdapter.setRecipeList(this, mRecipesList);

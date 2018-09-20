@@ -71,16 +71,17 @@ public class DetailActivity extends AppCompatActivity implements StepsFragment.O
         boolean fromWidget = data.getBoolean(getResources().getString(R.string.click_from_widget));
 
         if (fromWidget) {
-            mRecipe = getDatafromDatabase();
+            mRecipe = getDataFromDatabase();
         } else {
             mRecipe = data.getParcelable(Recipe.RECIPE);
         }
     }
 
-    private Recipe getDatafromDatabase() {
+    private Recipe getDataFromDatabase() {
         RecipeListViewModel vm = ViewModelProviders.of(this).get(RecipeListViewModel.class);
         List<RecipeEntry> recipeSteps = vm.getRecipeEntries().getValue();
         Recipe recipe = new Recipe();
+
         for (int i = 0; i < recipeSteps.size(); i++) {
             RecipeEntry entry = recipeSteps.get(i);
             recipe.setRecipeName(entry.getRecipeName());

@@ -15,8 +15,8 @@ public interface RecipeDao {
     @Query("SELECT * FROM recipelist")
     LiveData<List<RecipeEntry>> loadAllRecipes();
 
-    @Query("SELECT * FROM recipelist WHERE mRecipeName = :recipeName")
-    LiveData<RecipeEntry> loadRecipeByName(String recipeName);
+//    @Query("SELECT * FROM recipelist WHERE mRecipeName = :recipeName")
+//    LiveData<RecipeEntry> loadRecipeByName(String recipeName);
 
     // TODO think about it: pick specific step, do I need this?
     @Query("SELECT * FROM recipelist WHERE mStepNum = :stepNum")

@@ -8,7 +8,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.btandjaja.www.bakingrecipes.data.RecipeDatabase;
 import com.btandjaja.www.bakingrecipes.data.RecipeEntry;
@@ -20,6 +22,8 @@ import java.util.List;
  */
 public class BakingWidgetProvider extends AppWidgetProvider {
     private static boolean mEmptyDatabase;
+    // TODO remove
+    private static final String TAG = BakingWidgetProvider.class.getSimpleName();
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
         new GetDatabase(context);
@@ -31,6 +35,8 @@ public class BakingWidgetProvider extends AppWidgetProvider {
     }
 
     private static Intent getIntent(Context context) {
+        // TODO remove
+        Toast.makeText(context, String.valueOf(mEmptyDatabase), Toast.LENGTH_LONG).show();
         Class activity = mEmptyDatabase ? ListOfRecipesActivity.class : DetailActivity.class;
         Intent intent = new Intent(context, activity);
         Bundle extras = new Bundle();
@@ -53,8 +59,8 @@ public class BakingWidgetProvider extends AppWidgetProvider {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            LiveData<List<RecipeEntry>> entries = mDb.recipeDao().loadAllRecipes();
-            mEmptyDatabase = entries.getValue().size() <= 0;
+            List<RecipeEntry> entries = mDb.recipeDao().loadAllRecipes().getValue();
+            mEmptyDatabase = entries == null;
             return null;
         }
     }
