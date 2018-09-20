@@ -131,11 +131,15 @@ public class VideoActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        if (Util.SDK_INT > 23)
+            initializePlayer(Uri.parse(mVideoUrl));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        if ((Util.SDK_INT <= 23 || mPlayer == null))
+            initializePlayer(Uri.parse(mVideoUrl));
     }
 
     @Override
