@@ -51,17 +51,4 @@ public class RecipeListViewModel extends AndroidViewModel {
             return null;
         }
     }
-
-//    private static class InsertEntry extends AsyncTask<RecipeEntry, Void, Void> {
-//        private RecipeDatabase mDb;
-//        public InsertEntry(RecipeDatabase db) {
-//            mDb = db;
-//        }
-//
-//        @Override
-//        protected Void doInBackground(RecipeEntry... recipeEntries) {
-//            mDb.recipeDao().insertRecipe(recipeEntries[0]);
-//            return null;
-//        }
-//    }
 }
