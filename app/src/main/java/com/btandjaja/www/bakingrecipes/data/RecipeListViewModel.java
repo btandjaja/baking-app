@@ -12,6 +12,7 @@ public class RecipeListViewModel extends AndroidViewModel {
 
     private LiveData<List<RecipeEntry>> recipeEntries;
     private RecipeDatabase mDb;
+    private static final int QUERY_INSERT = 1, QUERY_DELETE = 2;
 
     public RecipeListViewModel(@NonNull Application application) {
         super(application);
@@ -23,40 +24,44 @@ public class RecipeListViewModel extends AndroidViewModel {
         return recipeEntries;
     }
 
-    public LiveData<RecipeEntry> getRecipeEntry(String recipeName) {
-        return mDb.recipeDao().loadRecipeByName(recipeName);
-    }
     public void deleteAll() {
-        new DeleteAll(mDb).execute();
+        new DatabaseAccess(mDb, QUERY_DELETE).execute();
     }
 
-    public void insertRecipe(RecipeEntry recipeEntry) {
-        new InsertEntry(mDb).execute(recipeEntry);
-    }
+    public void insertRecipe(RecipeEntry recipeEntry) { new DatabaseAccess(mDb, QUERY_INSERT).execute(recipeEntry); }
 
-    private static class DeleteAll extends AsyncTask<Void, Void, Void> {
+    private static class DatabaseAccess extends AsyncTask<RecipeEntry, Void, Void> {
         private RecipeDatabase mDb;
-        public DeleteAll(RecipeDatabase db) {
+        private int QUERY_TYPE;
+        public DatabaseAccess(RecipeDatabase db, int type) {
             mDb = db;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            mDb.recipeDao().deleteAll();
-            return null;
-        }
-    }
-
-    private static class InsertEntry extends AsyncTask<RecipeEntry, Void, Void> {
-        private RecipeDatabase mDb;
-        public InsertEntry(RecipeDatabase db) {
-            mDb = db;
+            QUERY_TYPE = type;
         }
 
         @Override
         protected Void doInBackground(RecipeEntry... recipeEntries) {
-            mDb.recipeDao().insertRecipe(recipeEntries[0]);
+            switch(QUERY_TYPE) {
+                case QUERY_DELETE:
+                    mDb.recipeDao().deleteAll();
+                    break;
+                case QUERY_INSERT:
+                    mDb.recipeDao().insertRecipe(recipeEntries[0]);
+                    break;
+            }
             return null;
         }
     }
+
+//    private static class InsertEntry extends AsyncTask<RecipeEntry, Void, Void> {
+//        private RecipeDatabase mDb;
+//        public InsertEntry(RecipeDatabase db) {
+//            mDb = db;
+//        }
+//
+//        @Override
+//        protected Void doInBackground(RecipeEntry... recipeEntries) {
+//            mDb.recipeDao().insertRecipe(recipeEntries[0]);
+//            return null;
+//        }
+//    }
 }

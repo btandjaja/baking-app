@@ -1,5 +1,6 @@
 package com.btandjaja.www.bakingrecipes;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,9 @@ import android.widget.Toast;
 
 import com.btandjaja.www.bakingrecipes.data.InstructionAdapter;
 import com.btandjaja.www.bakingrecipes.data.Recipe;
+import com.btandjaja.www.bakingrecipes.data.RecipeDatabase;
+import com.btandjaja.www.bakingrecipes.data.RecipeEntry;
+import com.btandjaja.www.bakingrecipes.data.RecipeListViewModel;
 import com.btandjaja.www.bakingrecipes.ui.StepsFragment;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -28,6 +32,8 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.TransferListener;
 import com.google.android.exoplayer2.util.Util;
+
+import java.util.List;
 
 public class DetailActivity extends AppCompatActivity implements StepsFragment.OnStepClickListener,
         InstructionAdapter.InstructionAdapterOnClickHandler {
@@ -62,9 +68,30 @@ public class DetailActivity extends AppCompatActivity implements StepsFragment.O
             Toast.makeText(this, getResources().getString(R.string.invalid_recipe), Toast.LENGTH_LONG).show();
             finish();
         }
-        mRecipe = data.getParcelable(Recipe.RECIPE);
+        boolean fromWidget = data.getBoolean(getResources().getString(R.string.click_from_widget));
+
+        if (fromWidget) {
+            mRecipe = getDatafromDatabase();
+        } else {
+            mRecipe = data.getParcelable(Recipe.RECIPE);
+        }
     }
 
+    private Recipe getDatafromDatabase() {
+        RecipeListViewModel vm = ViewModelProviders.of(this).get(RecipeListViewModel.class);
+        List<RecipeEntry> recipeSteps = vm.getRecipeEntries().getValue();
+        Recipe recipe = new Recipe();
+        for (int i = 0; i < recipeSteps.size(); i++) {
+            RecipeEntry entry = recipeSteps.get(i);
+            recipe.setRecipeName(entry.getRecipeName());
+            recipe.setIngredient(entry.getIngredient());
+            recipe.setThumbnailUrl(entry.getThumbnailUrl());
+            recipe.setVideoUrl(entry.getVideoLink());
+            recipe.setShortDescription(entry.getShortDescription());
+            recipe.setDescription(entry.getDescription());
+        }
+        return recipe;
+    }
     /**
      * Never called.
      */
