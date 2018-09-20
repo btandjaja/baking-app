@@ -55,7 +55,7 @@ public class VideoActivity extends AppCompatActivity {
                 Util.getUserAgent(this, getResources().getString(R.string.application_name)),
                 (TransferListener<? super DataSource>) mBandwidthMeter);
 
-        initializePlayer(Uri.parse(mVideoUrl));
+//        initializePlayer(Uri.parse(mVideoUrl));
     }
 
     private void checkSavedInstance(Bundle savedInstanceState) {
@@ -151,7 +151,7 @@ public class VideoActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        mPlayer.stop(true);
+//        mPlayer.stop(true);
         if (Util.SDK_INT > 23) releasePlayer();
     }
 

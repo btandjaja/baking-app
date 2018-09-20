@@ -36,9 +36,7 @@ public class BakingWidgetProvider extends AppWidgetProvider {
     private static Intent getIntent(Context context) {
         // TODO remove
         Toast.makeText(context, String.valueOf(mDatabase), Toast.LENGTH_LONG).show();
-        Class activity;// = mDatabase ? DetailActivity.class : ListOfRecipesActivity.class;
-        if (mDatabase) activity = DetailActivity.class;
-        else activity = ListOfRecipesActivity.class;
+        Class activity = mDatabase ? DetailActivity.class : ListOfRecipesActivity.class;
         Intent intent = new Intent(context, activity);
         Bundle extras = new Bundle();
         extras.putBoolean(context.getResources().getString(R.string.click_from_widget), true);
