@@ -79,13 +79,13 @@ public class DetailActivity extends AppCompatActivity implements StepsFragment.O
     }
 
     private Recipe getDataFromDatabase() {
-        RecipeListViewModel vm = ViewModelProviders.of(this).get(RecipeListViewModel.class);
+        final RecipeListViewModel vm = ViewModelProviders.of(this).get(RecipeListViewModel.class);
         final Recipe recipe = new Recipe();
 
         vm.getRecipeEntries().observe(this, new Observer<List<RecipeEntry>>() {
             @Override
             public void onChanged(@Nullable List<RecipeEntry> recipeEntries) {
-
+                vm.getRecipeEntries().removeObserver(this);
                 // do the logic in here
                 recipe.setRecipeName(recipeEntries.get(0).getRecipeName());
                 for (int i=0; i < recipeEntries.size(); i++) {
