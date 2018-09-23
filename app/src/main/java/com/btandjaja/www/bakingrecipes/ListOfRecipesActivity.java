@@ -1,7 +1,5 @@
 package com.btandjaja.www.bakingrecipes;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -14,13 +12,11 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.btandjaja.www.bakingrecipes.data.Recipe;
-import com.btandjaja.www.bakingrecipes.data.RecipeDatabase;
 import com.btandjaja.www.bakingrecipes.data.RecipeEntry;
 import com.btandjaja.www.bakingrecipes.data.RecipeListViewModel;
 import com.btandjaja.www.bakingrecipes.data.RecipesAdapter;
@@ -48,9 +44,7 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
     public static boolean mTabletMode;
 
     // database variable
-    private RecipeDatabase mDb;
     private RecipeListViewModel mRecipeListViewModel;
-    private boolean mClearDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +52,6 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_recipes);
         ButterKnife.bind(this);
-        // connect to the database
-        mDb = RecipeDatabase.getsInstance(getApplicationContext());
         setViewModelAndDeleteDb();
         if (savedInstanceState == null) {
             mTabletMode = findViewById(R.id.rl_tablet_mode) != null;
@@ -73,15 +65,7 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
 
     private void setViewModelAndDeleteDb() {
         mRecipeListViewModel = ViewModelProviders.of(this).get(RecipeListViewModel.class);
-        mRecipeListViewModel.getRecipeEntries().observe(this, new Observer<List<RecipeEntry>>() {
-            @Override
-            public void onChanged(@Nullable List<RecipeEntry> recipeEntries) {
-                mRecipeListViewModel.getRecipeEntries().removeObserver(this);
-                mClearDatabase = recipeEntries.size() > 0;
-            }
-        });
         mRecipeListViewModel.deleteAll();
-        Log.d("****viewmodel", String.valueOf(mRecipeListViewModel.count()));
     }
 
     private void initializeValriable() {

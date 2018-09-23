@@ -12,8 +12,7 @@ public class RecipeListViewModel extends AndroidViewModel {
 
     private LiveData<List<RecipeEntry>> recipeEntries;
     private RecipeDatabase mDb;
-    private static final int QUERY_INSERT = 1, QUERY_DELETE = 2, QUERY_COUNT = 3;
-    private static int mCount;
+    private static final int QUERY_INSERT = 1, QUERY_DELETE = 2;
 
     public RecipeListViewModel(@NonNull Application application) {
         super(application);
@@ -27,11 +26,6 @@ public class RecipeListViewModel extends AndroidViewModel {
 
     public void deleteAll() {
         new DatabaseAccess(mDb, QUERY_DELETE).execute();
-    }
-
-    public int count() {
-        new DatabaseAccess(mDb, QUERY_COUNT).execute();
-        return mCount;
     }
 
     public void insertRecipe(RecipeEntry recipeEntry) { new DatabaseAccess(mDb, QUERY_INSERT).execute(recipeEntry); }
@@ -50,14 +44,10 @@ public class RecipeListViewModel extends AndroidViewModel {
                 case QUERY_DELETE:
                     if (recipeEntries != null) {
                         mDb.recipeDao().deleteStepOne();
-                        mDb.recipeDao().deleteAll(recipeEntries);
                     }
                     break;
                 case QUERY_INSERT:
                     mDb.recipeDao().insertRecipe(recipeEntries[0]);
-                    break;
-                case QUERY_COUNT:
-                    mCount = mDb.recipeDao().loadCount();
                     break;
             }
             return null;
