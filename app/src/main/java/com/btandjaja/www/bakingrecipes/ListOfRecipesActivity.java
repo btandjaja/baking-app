@@ -25,7 +25,6 @@ import com.btandjaja.www.bakingrecipes.utilities.RecipesUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
