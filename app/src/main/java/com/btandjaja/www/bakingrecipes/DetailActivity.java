@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import com.btandjaja.www.bakingrecipes.data.InstructionAdapter;
 import com.btandjaja.www.bakingrecipes.data.Recipe;
-import com.btandjaja.www.bakingrecipes.data.RecipeDatabase;
 import com.btandjaja.www.bakingrecipes.data.RecipeEntry;
 import com.btandjaja.www.bakingrecipes.data.RecipeListViewModel;
 import com.btandjaja.www.bakingrecipes.ui.StepsFragment;
