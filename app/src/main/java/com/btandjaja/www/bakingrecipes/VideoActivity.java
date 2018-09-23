@@ -54,8 +54,6 @@ public class VideoActivity extends AppCompatActivity {
         mMediaDataSourceFactory = new DefaultDataSourceFactory(this,
                 Util.getUserAgent(this, getResources().getString(R.string.application_name)),
                 (TransferListener<? super DataSource>) mBandwidthMeter);
-
-//        initializePlayer(Uri.parse(mVideoUrl));
     }
 
     private void checkSavedInstance(Bundle savedInstanceState) {

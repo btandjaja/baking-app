@@ -15,22 +15,15 @@ public interface RecipeDao {
     @Query("SELECT * FROM recipelist")
     LiveData<List<RecipeEntry>> loadAllRecipes();
 
-//    @Query("SELECT * FROM recipelist WHERE mRecipeName = :recipeName")
-//    LiveData<RecipeEntry> loadRecipeByName(String recipeName);
-
-    // TODO think about it: pick specific step, do I need this?
-    @Query("SELECT * FROM recipelist WHERE mStepNum = :stepNum")
-    LiveData<RecipeEntry> loadRecipeByArrListIndex(int stepNum);
-
     @Query("DELETE FROM recipelist")
-    void deleteAll();
+    void deleteStepOne();
+
+    @Query("SELECT COUNT(*) FROM recipelist")
+    int loadCount();
+
+    @Delete
+    void deleteAll(RecipeEntry... recipeEntries);
 
     @Insert
     void insertRecipe(RecipeEntry recipeEntry);
-
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateRecipe(RecipeEntry recipeEntry);
-
-    @Delete
-    void deleteRecipe(RecipeEntry recipeEntry);
 }

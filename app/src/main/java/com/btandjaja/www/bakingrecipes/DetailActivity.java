@@ -81,31 +81,41 @@ public class DetailActivity extends AppCompatActivity implements StepsFragment.O
 
     private Recipe getDataFromDatabase() {
         RecipeListViewModel vm = ViewModelProviders.of(this).get(RecipeListViewModel.class);
-        final List<RecipeEntry> recipeSteps = null ;
-        Recipe recipe = new Recipe();
+//        final List<RecipeEntry> recipeSteps = null ;
+        final Recipe recipe = new Recipe();
 
         vm.getRecipeEntries().observe(this, new Observer<List<RecipeEntry>>() {
             @Override
             public void onChanged(@Nullable List<RecipeEntry> recipeEntries) {
-                getData(recipeEntries, recipeSteps);
+//                getData(recipeEntries, recipeSteps);
+//                recipeSteps = recipeEntries;
+                // do the logic in here
+                recipe.setRecipeName(recipeEntries.get(0).getRecipeName());
+                for (int i=0; i < recipeEntries.size(); i++) {
+                    recipe.setIngredient(recipeEntries.get(i).getIngredient());
+                    recipe.setThumbnailUrl(recipeEntries.get(i).getThumbnailUrl());
+                    recipe.setVideoUrl(recipeEntries.get(i).getVideoLink());
+                    recipe.setShortDescription(recipeEntries.get(i).getShortDescription());
+                    recipe.setDescription(recipeEntries.get(i).getDescription());
+                }
             }
         });
-
-        for (int i = 0; i < recipeSteps.size(); i++) {
-            RecipeEntry entry = recipeSteps.get(i);
-            recipe.setRecipeName(entry.getRecipeName());
-            recipe.setIngredient(entry.getIngredient());
-            recipe.setThumbnailUrl(entry.getThumbnailUrl());
-            recipe.setVideoUrl(entry.getVideoLink());
-            recipe.setShortDescription(entry.getShortDescription());
-            recipe.setDescription(entry.getDescription());
-        }
+//
+//        for (int i = 0; i < recipeSteps.size(); i++) {
+//            RecipeEntry entry = recipeSteps.get(i);
+//            recipe.setRecipeName(entry.getRecipeName());
+//            recipe.setIngredient(entry.getIngredient());
+//            recipe.setThumbnailUrl(entry.getThumbnailUrl());
+//            recipe.setVideoUrl(entry.getVideoLink());
+//            recipe.setShortDescription(entry.getShortDescription());
+//            recipe.setDescription(entry.getDescription());
+//        }
         return recipe;
     }
 
-    private void getData(List<RecipeEntry> recipeEntries, List<RecipeEntry> copyEntries) {
-        copyEntries = recipeEntries;
-    }
+//    private void getData(List<RecipeEntry> recipeEntries, List<RecipeEntry> copyEntries) {
+//        copyEntries = recipeEntries;
+//    }
     /**
      * Never called.
      */

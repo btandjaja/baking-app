@@ -50,6 +50,7 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
     // database variable
     private RecipeDatabase mDb;
     private RecipeListViewModel mRecipeListViewModel;
+    private boolean mClearDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,30 +73,24 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
 
     private void setViewModelAndDeleteDb() {
         mRecipeListViewModel = ViewModelProviders.of(this).get(RecipeListViewModel.class);
-
-        // TODO remove, view content
-        LiveData<List<RecipeEntry>> entries =  mDb.recipeDao().loadAllRecipes();
-        final String TAG = "******";
-//        Log.d(TAG, String.valueOf(entries.getValue() == null));
         mRecipeListViewModel.getRecipeEntries().observe(this, new Observer<List<RecipeEntry>>() {
             @Override
             public void onChanged(@Nullable List<RecipeEntry> recipeEntries) {
-                if (recipeEntries != null) {
-                    for (int i = 0; i < recipeEntries.size(); i++) {
-                        Log.d(TAG, recipeEntries.get(i).getDescription());
-                    }
-                }
+                mRecipeListViewModel.getRecipeEntries().removeObserver(this);
+                mClearDatabase = recipeEntries.size() > 0;
             }
         });
-        // reset database if there's data
-        if (mRecipeListViewModel.getRecipeEntries().getValue() != null)
-            if(mRecipeListViewModel.getRecipeEntries().getValue().size() > 0)
-                mRecipeListViewModel.deleteAll();
+        mRecipeListViewModel.deleteAll();
+        Log.d("****viewmodel", String.valueOf(mRecipeListViewModel.count()));
     }
 
-    private void initializeValriable() { mRecipesList = new ArrayList<>(); }
+    private void initializeValriable() {
+        mRecipesList = new ArrayList<>();
+    }
 
-    private void createAdapter() { mRecipeAdapter = new RecipesAdapter(this); }
+    private void createAdapter() {
+        mRecipeAdapter = new RecipesAdapter(this);
+    }
 
     private void setRecyclerView() {
         // Default gridView count
@@ -171,7 +166,8 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
      * @param loader
      */
     @Override
-    public void onLoaderReset(@NonNull Loader<String> loader) { }
+    public void onLoaderReset(@NonNull Loader<String> loader) {
+    }
 
     private void setAdapter() {
         mRecipeAdapter.setRecipeList(this, mRecipesList);
@@ -217,7 +213,7 @@ public class ListOfRecipesActivity extends AppCompatActivity implements LoaderMa
     }
 
     private void addRecipeToDatabase(Recipe recipe) {
-        for (int i=0; i < recipe.getSteps(); i++) {
+        for (int i = 0; i < recipe.getSteps(); i++) {
             RecipeEntry recipeEntry = new RecipeEntry(recipe.getRecipeName(),
                     recipe.getIngredientFromIndex(i),
                     recipe.getVideoLinkFromIndex(i),

@@ -3,15 +3,18 @@ package com.btandjaja.www.bakingrecipes;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.btandjaja.www.bakingrecipes.data.RecipeDatabase;
 import com.btandjaja.www.bakingrecipes.data.RecipeEntry;
+import com.btandjaja.www.bakingrecipes.data.RecipeListViewModel;
 
 import java.util.List;
 
@@ -29,18 +32,13 @@ public class BakingWidgetProvider extends AppWidgetProvider {
         RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.baking_widget);
         rv.setImageViewResource(R.id.iv_widget_baking_image, getImage(context));
         rv.setOnClickPendingIntent(R.id.iv_widget_baking_image, pendingIntent);
-        Toast.makeText(context, "Hello", Toast.LENGTH_LONG).show();
+        //TODO remove
+        Log.d("****widget", "database");
         appWidgetManager.updateAppWidget(appWidgetId, rv);
     }
 
     private static Intent getIntent(Context context) {
-        // TODO remove
-        Toast.makeText(context, String.valueOf(mDatabase), Toast.LENGTH_LONG).show();
-        Class activity = mDatabase ? DetailActivity.class : ListOfRecipesActivity.class;
-        Intent intent = new Intent(context, activity);
-        Bundle extras = new Bundle();
-        extras.putBoolean(context.getResources().getString(R.string.click_from_widget), true);
-        intent.putExtras(extras);
+        Intent intent = new Intent(context, CheckDatabase.class);
         return intent;
     }
 

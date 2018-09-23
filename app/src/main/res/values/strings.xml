@@ -55,4 +55,6 @@
     <string name="appwidget_text">BANANA TEST</string>
     <string name="add_widget">Add widget</string>
     <string name="click_from_widget">click_from_widget</string>
+
+    <string name="check_database">Checking Database</string>
 </resources>

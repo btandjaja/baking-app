@@ -35,6 +35,7 @@
                 android:resource="@xml/baking_widget_provider_info" />
         </receiver>
 
+        <activity android:name=".CheckDatabase"></activity>
     </application>
 
 </manifest>
