@@ -29,11 +29,13 @@ public class CheckDatabase extends AppCompatActivity {
                 if (recipeEntries.size() > 0)
                     startActivity(intentWithData);
                 else startActivity(intentNoData);
+                finish();
             }
         });
         Bundle extras = new Bundle();
         extras.putBoolean(getResources().getString(R.string.click_from_widget), true);
         intentNoData.putExtras(extras);
         intentWithData.putExtras(extras);
+
     }
 }
