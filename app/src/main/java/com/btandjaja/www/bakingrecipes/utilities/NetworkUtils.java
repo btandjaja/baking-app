@@ -14,7 +14,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.util.Scanner;
 
-public class NetworkUtils {
+public final class NetworkUtils {
 
     /**
      * Builds the URL used to query movie.

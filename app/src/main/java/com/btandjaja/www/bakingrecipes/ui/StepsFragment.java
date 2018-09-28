@@ -22,8 +22,8 @@ import butterknife.ButterKnife;
 
 public class StepsFragment extends Fragment {
     // define a new interface OnStepClickListener that triggers a callback to the host activity
-    OnStepClickListener mCallback;
-    Recipe mRecipe;
+    private OnStepClickListener mCallback;
+    private Recipe mRecipe;
     @BindView(R.id.rv_recipe_instruction_list) RecyclerView mRecyclerView;
     @BindView(R.id.tv_recipe_title) TextView mRecipeName;
 

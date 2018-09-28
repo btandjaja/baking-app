@@ -15,6 +15,9 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class RecipesUtils {
+
+    private RecipesUtils() { throw new AssertionError(); }
+    
     public static String getRecipesListJsonString(String recipeUrlString) {
         try {
             if (recipeUrlString == null || TextUtils.isEmpty(recipeUrlString)) return null;
